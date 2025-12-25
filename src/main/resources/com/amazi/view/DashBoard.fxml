@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.Circle?>
+<?import java.net.URL?>
+
+<HBox fx:controller="com.amazi.controller.StudentDashboardController"
+      styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+    <stylesheets>
+        <URL value="@/css/style.css" />
+    </stylesheets>
+
+    <VBox prefWidth="260" spacing="20" styleClass="sidebar">
+        <Label text="AMAZI" styleClass="sidebar-logo"/>
+
+        <VBox spacing="10" VBox.vgrow="ALWAYS">
+            <Button text="Insights" onAction="#handleDashboardHome" maxWidth="Infinity" styleClass="nav-button-active"/>
+            <Button text="Portfolios" onAction="#handleCreatePortfolio" maxWidth="Infinity" styleClass="nav-button"/>
+            <Button text="Settings" onAction="#handleSettings" maxWidth="Infinity" styleClass="nav-button"/>
+        </VBox>
+
+        <StackPane alignment="TOP_RIGHT">
+            <Button text="My Portfolios" onAction="#handleSubmitPortfolio"
+                    maxWidth="Infinity" styleClass="btn-primary-green"/>
+            <Label fx:id="notificationBadge" text="0" visible="false"
+                   style="-fx-background-color: #ef4444; -fx-text-fill: white;
+                          -fx-background-radius: 10; -fx-padding: 2 6;
+                          -fx-font-size: 10px; -fx-font-weight: bold;"
+                   translateY="-5" translateX="5"/>
+        </StackPane>
+
+        <Button text="Sign Out" onAction="#handleLogout" maxWidth="Infinity" styleClass="btn-outline-logout"/>
+    </VBox>
+
+    <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS" styleClass="content-scroll-pane">
+        <VBox spacing="30" styleClass="content-padding">
+
+            <HBox alignment="CENTER_LEFT">
+                <VBox>
+                    <Label text="Dashboard" styleClass="header-title"/>
+                    <Label fx:id="welcomeLabel" text="Welcome back, Abay" styleClass="header-subtitle"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+
+                <HBox spacing="15" alignment="CENTER">
+                    <Button text="Refresh" onAction="#handleRefresh" styleClass="btn-refresh"
+                            style="-fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-cursor: hand;"/>
+
+                    <VBox alignment="CENTER_RIGHT">
+                        <Label text="Abay Shimelis" styleClass="user-name"/>
+                        <Label text="Student ID: 1003/16" styleClass="user-id"/>
+                    </VBox>
+
+                    <StackPane onMouseClicked="#handleImageUpload" style="-fx-cursor: hand;">
+                        <ImageView fx:id="userProfileImage" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@Images/img.png" />
+                            <clip><Circle centerX="22.0" centerY="22.0" radius="22.0" /></clip>
+                        </ImageView>
+                    </StackPane>
+                </HBox>
+            </HBox>
+
+            <VBox fx:id="mainContentArea" spacing="30">
+                <HBox spacing="20">
+                    <VBox HBox.hgrow="ALWAYS" spacing="15" styleClass="stat-card">
+                        <Label text="Total Credits" styleClass="card-label"/>
+                        <Label text="124" styleClass="card-value"/>
+                    </VBox>
+
+                    <VBox HBox.hgrow="ALWAYS" spacing="15" styleClass="stat-card">
+                        <Label text="Latest Portfolio Grade" styleClass="card-label"/>
+                        <Label fx:id="portfolioScoreLabel" text="--" styleClass="card-value-green"/>
+                    </VBox>
+                </HBox>
+
+                <VBox spacing="15">
+                    <Label text="Recent Activity &amp; Results" styleClass="section-title"
+                           style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+                    <VBox fx:id="activityListContainer" spacing="12" styleClass="activity-container">
+                        <Label text="Loading your latest results..." style="-fx-text-fill: #94a3b8; -fx-font-style: italic;"/>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </VBox>
+    </ScrollPane>
+</HBox>

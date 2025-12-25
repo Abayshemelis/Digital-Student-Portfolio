@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<?import java.net.URL?>
+<AnchorPane prefHeight="600.0" prefWidth="900.0"
+            styleClass="main-container"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.amazi.controller.AdminDashBoardController">
+
+    <stylesheets>
+        <URL value="@/css/style.css" />
+    </stylesheets>
+
+    <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+        <padding>
+            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
+        </padding>
+
+        <HBox alignment="CENTER_LEFT" styleClass="header-bar">
+            <Label styleClass="header-title" text="Admin Management System"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button onAction="#handleLogout" styleClass="btn-logout" text="Log Out"/>
+        </HBox>
+
+        <TableView fx:id="userTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+            <columns>
+                <TableColumn fx:id="idColumn" prefWidth="80.0" text="ID"/>
+                <TableColumn fx:id="nameColumn" prefWidth="250.0" text="Full Name"/>
+                <TableColumn fx:id="emailColumn" prefWidth="300.0" text="Email Address"/>
+                <TableColumn fx:id="roleColumn" prefWidth="150.0" text="User Role"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN"/>
+            </columnResizePolicy>
+        </TableView>
+    </VBox>
+</AnchorPane>

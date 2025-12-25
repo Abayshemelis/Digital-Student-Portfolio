@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+
+<VBox spacing="20.0" alignment="TOP_CENTER" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+      prefWidth="600.0" style="-fx-background-color: transparent;">
+    <padding>
+        <Insets top="30.0" right="40.0" bottom="30.0" left="40.0"/>
+    </padding>
+
+    <Label text="Account Settings" style="-fx-text-fill: white; -fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+    <VBox spacing="15.0" styleClass="glass-card" style="-fx-background-color: rgba(255,255,255,0.05); -fx-padding: 20; -fx-background-radius: 15;">
+        <Label text="Profile Information" style="-fx-text-fill: #3b82f6; -fx-font-weight: bold;"/>
+
+        <HBox spacing="15.0" alignment="CENTER_LEFT">
+            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
+                <Label text="Full Name" style="-fx-text-fill: #94a3b8;"/>
+                <TextField text="Abay" styleClass="modern-input" style="-fx-background-color: rgba(255,255,255,0.1); -fx-text-fill: white;"/>
+            </VBox>
+        </HBox>
+
+        <VBox spacing="5.0">
+            <Label text="Email Address" style="-fx-text-fill: #94a3b8;"/>
+            <TextField text="abay@university.edu" editable="false" styleClass="modern-input" style="-fx-background-color: rgba(255,255,255,0.05); -fx-text-fill: #64748b;"/>
+        </VBox>
+    </VBox>
+
+    <VBox spacing="15.0" styleClass="glass-card" style="-fx-background-color: rgba(255,255,255,0.05); -fx-padding: 20; -fx-background-radius: 15;">
+        <Label text="Preferences" style="-fx-text-fill: #3b82f6; -fx-font-weight: bold;"/>
+        <CheckBox text="Enable Email Notifications" selected="true" style="-fx-text-fill: white;"/>
+        <CheckBox text="Public Profile Visibility" style="-fx-text-fill: white;"/>
+    </VBox>
+
+    <Button text="Save Changes" styleClass="gradient-button" prefWidth="200.0"/>
+</VBox>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
+
+<VBox alignment="CENTER" prefHeight="650.0" prefWidth="700.0" styleClass="root-pane"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.amazi.controller.PortfolioController">
+
+    <stylesheets>
+        <URL value="@/css/style.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="40.0" left="30.0" right="30.0" top="30.0" />
+    </padding>
+
+    <VBox maxWidth="550.0" styleClass="dashboard-card" spacing="10">
+        <VBox alignment="CENTER_LEFT" prefHeight="90.0" styleClass="header-section">
+            <padding><Insets left="30.0" /></padding>
+            <Label text="Create Portfolio" styleClass="header-title" />
+            <Label text="Showcase your best academic work" styleClass="header-subtitle" />
+        </VBox>
+
+        <VBox spacing="20.0" styleClass="content-body">
+            <padding><Insets bottom="35.0" left="35.0" right="35.0" top="30.0" /></padding>
+
+            <TextField fx:id="titleField" prefHeight="48.0" promptText="Enter Project Title" styleClass="modern-input" />
+
+            <TextArea fx:id="descriptionArea" prefHeight="110.0" promptText="What is this project about?" styleClass="modern-input" wrapText="true" />
+
+            <HBox spacing="15.0">
+                <ComboBox fx:id="courseComboBox" maxWidth="Infinity" prefHeight="48.0" promptText="Select Course" styleClass="modern-combo" HBox.hgrow="ALWAYS" />
+                <DatePicker fx:id="submissionDatePicker" maxWidth="Infinity" prefHeight="48.0" promptText="Date" styleClass="modern-datepicker" HBox.hgrow="ALWAYS" />
+            </HBox>
+
+            <ComboBox fx:id="assignmentComboBox" maxWidth="Infinity" prefHeight="48.0" promptText="Assignment Type" styleClass="modern-combo" />
+
+            <HBox alignment="CENTER_LEFT" spacing="15.0" styleClass="file-upload-box">
+                <Button onAction="#handleFileUpload" text="📁 Upload File" styleClass="upload-btn" />
+                <Label fx:id="fileNameLabel" text="No file attached" styleClass="file-label" />
+            </HBox>
+
+            <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                <HBox HBox.hgrow="ALWAYS" />
+                <Button onAction="#handleDiscard" prefHeight="45.0" prefWidth="100.0" text="Cancel" styleClass="cancel-btn" />
+                <Button onAction="#handlePublish" prefHeight="45.0" prefWidth="150.0" text="Save Draft" styleClass="save-btn" />
+            </HBox>
+        </VBox>
+    </VBox>
+</VBox>

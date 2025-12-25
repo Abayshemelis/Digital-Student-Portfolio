@@ -1,0 +1,12 @@
+1|Admin|admin@amazi.com|admin123|Admin
+2|Faculty User|faculty@amazi.com|faculty123|Faculty
+3|Student User|student@amazi.com|student123|Student
+4|poffesor|hu|1234|Faculty
+5|abay|hu|123|Student
+6|Abay|hu|1234|Admin
+7|mafi|hu|1212|Student
+8|mafi|hu|2211|Admin
+9|kira|hu|1111|Admin
+10|hu|std|1234|Student
+11|nejwa|Hawassa|1111|Student
+12|prof|hu|3333|Faculty
