@@ -3,41 +3,68 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.shape.Circle?>
+<?import java.net.URL?>
 
-<StackPane prefWidth="900.0" prefHeight="650.0"
-           xmlns="http://javafx.com/javafx/17"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.amazi.controller.RegisterController"
-           styleClass="rg-water-root"
-           stylesheets="@/css/style.css"> <Pane mouseTransparent="true">
-    <Circle fx:id="bubble1" radius="250.0" styleClass="rg-bubble-top" layoutX="100.0" layoutY="100.0" />
-    <Circle fx:id="bubble2" radius="180.0" styleClass="rg-bubble-bottom" layoutX="850.0" layoutY="550.0" />
-</Pane>
+<StackPane prefWidth="650.0" prefHeight="700.0" styleClass="main-bg"
+           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.amazi.controller.RegisterController">
 
-    <VBox spacing="35.0" alignment="CENTER" maxWidth="450.0" maxHeight="600.0" styleClass="rg-glass-card">
+    <stylesheets>
+        <URL value="@/css/style.css" />
+    </stylesheets>
+
+    <Circle fx:id="bubble1" radius="250.0" styleClass="orb-blue" StackPane.alignment="TOP_LEFT">
+        <StackPane.margin><Insets top="-100.0" left="-100.0"/></StackPane.margin>
+    </Circle>
+    <Circle fx:id="bubble2" radius="180.0" styleClass="orb-green" StackPane.alignment="BOTTOM_RIGHT">
+        <StackPane.margin><Insets bottom="-80.0" right="-80.0"/></StackPane.margin>
+    </Circle>
+
+    <VBox spacing="20.0" alignment="CENTER" maxWidth="450.0" maxHeight="680.0" styleClass="glass-card">
         <padding>
-            <Insets top="40.0" right="50.0" bottom="40.0" left="50.0"/>
+            <Insets top="30.0" right="40.0" bottom="30.0" left="40.0"/>
         </padding>
 
-        <VBox alignment="CENTER" spacing="10.0">
-            <Label text="AMAZI" styleClass="rg-water-logo"/>
-            <Label text="Create your academic account" styleClass="rg-water-subtitle"/>
+        <VBox alignment="CENTER" spacing="5.0">
+            <Label text="CREATE ACCOUNT" styleClass="brand-logo" style="-fx-font-size: 28px;"/>
+            <Label text="Join the AMAZI Portfolio System" styleClass="brand-subtitle"/>
         </VBox>
 
-        <VBox spacing="20.0">
-            <TextField fx:id="nameField" promptText="Full Name" styleClass="rg-input-field"/>
-            <TextField fx:id="emailField" promptText="University Email" styleClass="rg-input-field"/>
+        <VBox spacing="12.0">
+            <VBox spacing="5.0">
+                <Label text="Full Name" styleClass="input-label"/>
+                <TextField fx:id="nameField" promptText="Enter your full name" styleClass="modern-input"/>
+            </VBox>
 
-            <ComboBox fx:id="roleComboBox" prefWidth="Infinity" promptText="Select Role" styleClass="rg-input-field"/>
+            <VBox spacing="5.0">
+                <Label text="User Name" styleClass="input-label"/>
+                <TextField fx:id="usernameField" promptText="Choose a unique user name" styleClass="modern-input"/>
+            </VBox>
 
-            <PasswordField fx:id="passwordField" promptText="Create Password" styleClass="rg-input-field"/>
+            <VBox spacing="5.0">
+                <Label text="University Email" styleClass="input-label"/>
+                <TextField fx:id="emailField" promptText="name@university.edu" styleClass="modern-input"/>
+            </VBox>
+
+            <VBox spacing="5.0">
+                <Label text="Register as" styleClass="input-label"/>
+                <ComboBox fx:id="roleComboBox" prefWidth="Infinity" styleClass="modern-combo"/>
+            </VBox>
+
+            <VBox spacing="5.0">
+                <Label text="Password" styleClass="input-label"/>
+                <PasswordField fx:id="passwordField" promptText="Create a strong password" styleClass="modern-input"/>
+            </VBox>
         </VBox>
 
-        <VBox spacing="15.0" alignment="CENTER">
-            <Button text="Create Account" onAction="#handleRegistration" prefWidth="Infinity" styleClass="rg-liquid-btn"/>
-            <Hyperlink text="Already a member? Sign in" onAction="#backToLogin" styleClass="rg-water-link"/>
+        <VBox spacing="10.0" alignment="CENTER">
+            <Button text="CREATE ACCOUNT" onAction="#handleRegistration" prefWidth="Infinity" styleClass="gradient-button"/>
+            <Label fx:id="messageLabel" styleClass="error-text" wrapText="true" alignment="CENTER" minHeight="20.0"/>
         </VBox>
 
-        <Label fx:id="messageLabel" styleClass="rg-error-txt" wrapText="true" alignment="CENTER" minHeight="25.0"/>
+        <HBox spacing="10.0" alignment="CENTER">
+            <Label text="Already have an account?" styleClass="brand-subtitle" style="-fx-font-size: 13px;"/>
+            <Hyperlink text="Sign In" onAction="#backToLogin" styleClass="forgot-link" style="-fx-font-weight: bold;"/>
+        </HBox>
     </VBox>
 </StackPane>

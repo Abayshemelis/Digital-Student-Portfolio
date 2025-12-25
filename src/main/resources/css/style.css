@@ -118,6 +118,46 @@
 .create-account-btn:hover {
     -fx-background-color: rgba(59, 130, 246, 0.1);
 }
+/* --- ROLE TABS --- */
+.tab-button, .tab-button-active {
+    -fx-background-color: transparent;
+    -fx-padding: 15 0;
+    -fx-font-size: 13px;
+    -fx-text-fill: #64748b;
+    -fx-cursor: hand;
+    -fx-border-color: transparent transparent rgba(0,0,0,0.1) transparent;
+    -fx-border-width: 0 0 2 0;
+}
+
+.tab-button-active {
+    -fx-text-fill: #0d9488;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent transparent #10b981 transparent;
+}
+
+/* --- STATIC INPUTS --- */
+.modern-input {
+    -fx-background-color: #f8fafc;
+    -fx-background-radius: 10;
+    -fx-border-color: #cbd5e1;
+    -fx-border-radius: 10;
+    -fx-padding: 12;
+    -fx-font-size: 14px;
+}
+
+.modern-input:focused {
+    -fx-background-color: white;
+    -fx-border-color: #10b981;
+}
+
+/* --- BUTTONS --- */
+.gradient-button {
+    -fx-background-color: linear-gradient(to right, #10b981, #0ea5e9);
+    -fx-text-fill: white;
+    -fx-background-radius: 12;
+    -fx-font-weight: bold;
+    -fx-padding: 15;
+}
 
 /*AdminDashBoardStyle part (122-203)*/
 /* Matches styleClass="main-container" */

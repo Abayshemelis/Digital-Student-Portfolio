@@ -11,47 +11,85 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class LoginController {
+    private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
+    private static final String ERROR_COLOR = "#fb7185";
+
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
+    @FXML private ComboBox<String> roleSelector;
     @FXML private Label messageLabel;
+
+    @FXML private Button adminTab, staffTab, studentTab;
+
+    @FXML
+    public void initialize() {
+        // Default to Student role on startup
+        roleSelector.setValue("Student");
+    }
+
+    @FXML
+    private void handleTabSwitch(ActionEvent event) {
+        Button clicked = (Button) event.getSource();
+        messageLabel.setText("");
+
+        // Reset all tab styles
+        adminTab.getStyleClass().setAll("tab-button", "button");
+        staffTab.getStyleClass().setAll("tab-button", "button");
+        studentTab.getStyleClass().setAll("tab-button", "button");
+
+        // Set active style to clicked tab
+        clicked.getStyleClass().setAll("tab-button-active", "button");
+
+        // Update internal role logic
+        if (clicked == adminTab) {
+            roleSelector.setValue("Admin");
+        } else if (clicked == staffTab) {
+            roleSelector.setValue("Faculty");
+        } else {
+            roleSelector.setValue("Student");
+        }
+    }
 
     @FXML
     private void handleLogin(ActionEvent event) {
         String email = emailField.getText().trim();
         String password = passwordField.getText();
+        String selectedRole = roleSelector.getValue();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            showError("Please enter both user name and password.");
+            return;
+        }
 
         User user = DataManager.validateUser(email, password);
 
         if (user != null) {
-            String role = user.getRole();
-            System.out.println("Login Success: " + email + " | Role: [" + role + "]");
+            validateRoleAndNavigate(user, selectedRole, event);
+        } else {
+            showError("Invalid user name or password.");
+        }
+    }
 
-            if (role == null) {
-                messageLabel.setText("Error: User role not assigned.");
-                return;
-            }
+    private void validateRoleAndNavigate(User user, String selectedRole, ActionEvent event) {
+        String actualRole = user.getRole();
 
-            // FIXED: 'if' statement replaced with 'switch' statement
-            switch (role.toLowerCase()) {
-                case "admin":
-                    changeScene("/com/amazi/view/AdminDashboard.fxml", "Admin Dashboard", event);
-                    break;
-                case "faculty":
-                case "instructor":
-                    changeScene("/com/amazi/view/FacultyReview.fxml", "Faculty Portal", event);
-                    break;
-                case "student":
-                    changeScene("/com/amazi/view/DashBoard.fxml", "Student Dashboard", event);
-                    break;
-                default:
-                    messageLabel.setText("Error: Role '" + role + "' not recognized.");
-                    break;
+        if (actualRole != null && actualRole.equalsIgnoreCase(selectedRole)) {
+            String fxmlPath = switch (selectedRole.toLowerCase()) {
+                case "admin" -> "/com/amazi/view/AdminDashboard.fxml";
+                case "faculty" -> "/com/amazi/view/FacultyReview.fxml";
+                case "student" -> "/com/amazi/view/DashBoard.fxml";
+                default -> null;
+            };
+
+            if (fxmlPath != null) {
+                changeScene(fxmlPath, selectedRole + " Portal", event);
             }
         } else {
-            messageLabel.setText("Invalid credentials.");
-            messageLabel.setStyle("-fx-text-fill: #fb7185;");
+            showError("Access Denied: You are not authorized as " + selectedRole);
         }
     }
 
@@ -62,45 +100,38 @@ public class LoginController {
 
     @FXML
     private void handleForgotPassword(ActionEvent event) {
-        // Parameter 'event' is used here to prevent the warning
-        if (event != null) {
-            messageLabel.setText("Reset link sent!");
-            messageLabel.setStyle("-fx-text-fill: #4ade80;");
-        }
+        messageLabel.setText("Reset link sent to your email!");
+        messageLabel.setStyle("-fx-text-fill: #4ade80;");
+    }
+
+    private void showError(String message) {
+        messageLabel.setText(message);
+        messageLabel.setStyle("-fx-text-fill: " + ERROR_COLOR + ";");
     }
 
     private void changeScene(String fxml, String title, ActionEvent event) {
         try {
             URL loc = getClass().getResource(fxml);
             if (loc == null) {
-                // Better logging than printStackTrace
-                System.err.println("Navigation Failed: Resource not found at " + fxml);
+                LOGGER.log(Level.SEVERE, "Resource not found: " + fxml);
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(loc);
             Parent root = loader.load();
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
 
-            // FIXED: Typo/Logic causing "fname is null"
-            // We ensure the CSS resource is fully qualified and checked for existence
             URL css = getClass().getResource("/com/amazi/view/style.css");
-            if (css != null) {
-                scene.getStylesheets().add(css.toExternalForm());
-            } else {
-                System.err.println("Log: style.css not found, skipping stylesheet application.");
-            }
+            if (css != null) scene.getStylesheets().add(css.toExternalForm());
 
-            // Using 'event' to identify the source stage
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
-            stage.setTitle(title);
+            stage.setTitle("AMAZI | " + title);
             stage.centerOnScreen();
-
+            stage.show();
         } catch (Exception e) {
-            // Replaced printStackTrace with robust error message
-            System.err.println("CRITICAL: Failed to transition to " + title + ". Check FXML controller assignments.");
-            messageLabel.setText("Error loading page.");
+            LOGGER.log(Level.SEVERE, "Navigation failed", e);
+            showError("Error loading page.");
         }
     }
 }

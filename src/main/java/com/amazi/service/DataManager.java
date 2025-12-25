@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DataManager {
-    // FIXED: Using a proper Logger instead of printStackTrace
     private static final Logger LOGGER = Logger.getLogger(DataManager.class.getName());
 
     private static final List<User> users = new ArrayList<>();
@@ -24,11 +23,11 @@ public class DataManager {
     static {
         loadUsersFromFile();
 
-        // Ensure default users exist if file is empty
+        // Ensure default users exist with 6 arguments (ID, Name, Username, Email, Password, Role)
         if (users.isEmpty()) {
-            users.add(new User(nextId++, "Admin", "admin@amazi.com", "admin123", "Admin"));
-            users.add(new User(nextId++, "Faculty User", "faculty@amazi.com", "faculty123", "Faculty"));
-            users.add(new User(nextId++, "Student User", "student@amazi.com", "student123", "Student"));
+            users.add(new User(nextId++, "Admin", "admin", "admin@amazi.com", "admin123", "Admin"));
+            users.add(new User(nextId++, "Faculty User", "faculty", "faculty@amazi.com", "faculty123", "Faculty"));
+            users.add(new User(nextId++, "Student User", "student", "student@amazi.com", "student123", "Student"));
             saveUsersToFile();
         }
         loadSubmissionsFromFile();
@@ -36,26 +35,34 @@ public class DataManager {
 
     // --- USER MANAGEMENT ---
 
-    public static void addUser(String name, String email, String password, String role) {
-        // CLEANUP: Ensure role names are standardized to "Faculty" for consistency
-        String standardizedRole = role;
-        if (role.equalsIgnoreCase("Instructor")) {
-            standardizedRole = "Faculty";
-        }
+    /**
+     * UPDATED: Accepts 5 parameters from RegisterController
+     * and passes 6 parameters to the User constructor.
+     */
+    public static void addUser(String name, String username, String email, String password, String role) {
+        String standardizedRole = role.equalsIgnoreCase("Instructor") ? "Faculty" : role;
 
-        users.add(new User(nextId++, name.trim(), email.trim(), password, standardizedRole));
+        users.add(new User(nextId++, name.trim(), username.trim(), email.trim(), password, standardizedRole));
         saveUsersToFile();
     }
 
-    public static User validateUser(String email, String password) {
-        if (email == null || password == null) return null;
+    /**
+     * UPDATED: Validates against either Username OR Email.
+     */
+    public static User validateUser(String identifier, String password) {
+        if (identifier == null || password == null) return null;
 
+        String cleanId = identifier.trim();
         return users.stream()
-                .filter(u -> u.getEmail().equalsIgnoreCase(email.trim()) && u.getPassword().equals(password))
+                .filter(u -> (u.getUsername().equalsIgnoreCase(cleanId) || u.getEmail().equalsIgnoreCase(cleanId))
+                        && u.getPassword().equals(password))
                 .findFirst()
                 .orElse(null);
     }
 
+    /**
+     * FIXED: This method was missing, causing the "symbol not found" error.
+     */
     public static List<User> getAllUsers() {
         return new ArrayList<>(users);
     }
@@ -63,7 +70,9 @@ public class DataManager {
     private static void saveUsersToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(USERS_FILE))) {
             for (User u : users) {
-                writer.println(u.getUserID() + "|" + u.getName() + "|" + u.getEmail() + "|" + u.getPassword() + "|" + u.getRole());
+                // FIXED: Now saves 6 fields including Username
+                writer.println(u.getUserID() + "|" + u.getName() + "|" + u.getUsername() + "|" +
+                        u.getEmail() + "|" + u.getPassword() + "|" + u.getRole());
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Could not save users to file", e);
@@ -78,9 +87,10 @@ public class DataManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split("\\|");
-                if (p.length >= 5) {
+                // FIXED: Now expects 6 fields
+                if (p.length >= 6) {
                     int id = Integer.parseInt(p[0]);
-                    users.add(new User(id, p[1], p[2], p[3], p[4]));
+                    users.add(new User(id, p[1], p[2], p[3], p[4], p[5]));
                     nextId = Math.max(nextId, id + 1);
                 }
             }
@@ -89,7 +99,7 @@ public class DataManager {
         }
     }
 
-    // --- SUBMISSION MANAGEMENT ---
+    // --- SUBMISSION MANAGEMENT (Keep existing logic) ---
 
     public static ObservableList<Submission> getAllSubmissions() {
         return allSubmissions;
@@ -103,7 +113,6 @@ public class DataManager {
     public static void updateSubmissionInFile(Submission submission) {
         for (int i = 0; i < allSubmissions.size(); i++) {
             Submission current = allSubmissions.get(i);
-            // Match based on unique combination of student and project title
             if (current.getTitle().equals(submission.getTitle()) &&
                     current.getStudentName().equals(submission.getStudentName())) {
                 allSubmissions.set(i, submission);
@@ -123,7 +132,6 @@ public class DataManager {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split("\\|");
                 if (parts.length >= 6) {
-                    // Reconstructing Submission object from text file parts
                     Submission s = new Submission(parts[0], parts[1], "Project", "General",
                             LocalDate.now(), "No description", "None",
                             parts[3], parts[2]);
@@ -140,11 +148,8 @@ public class DataManager {
     private static void saveSubmissionsToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(SUBMISSION_FILE))) {
             for (Submission s : allSubmissions) {
-                writer.println(s.getTitle() + "|" +
-                        s.getCourse() + "|" +
-                        s.getStudentName() + "|" +
-                        s.getStatus() + "|" +
-                        (s.getFeedback() == null ? "No feedback" : s.getFeedback()) + "|" +
+                writer.println(s.getTitle() + "|" + s.getCourse() + "|" + s.getStudentName() + "|" +
+                        s.getStatus() + "|" + (s.getFeedback() == null ? "No feedback" : s.getFeedback()) + "|" +
                         (s.getGrade() == null ? "N/A" : s.getGrade()));
             }
         } catch (IOException e) {

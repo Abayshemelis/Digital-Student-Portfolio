@@ -5,11 +5,9 @@
 <?import javafx.scene.shape.Circle?>
 <?import java.net.URL?>
 
-<StackPane prefWidth="650.0" prefHeight="700.0"
-           xmlns="http://javafx.com/javafx/17"
-           xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="com.amazi.controller.LoginController"
-           styleClass="main-bg">
+<StackPane prefWidth="650.0" prefHeight="700.0" styleClass="main-bg"
+           xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.amazi.controller.LoginController">
 
     <stylesheets>
         <URL value="@/css/style.css" />
@@ -22,29 +20,40 @@
         <StackPane.margin><Insets bottom="-80.0" right="-80.0"/></StackPane.margin>
     </Circle>
 
-    <VBox spacing="25.0" alignment="CENTER" maxWidth="450.0" maxHeight="580.0" styleClass="glass-card">
+    <VBox spacing="25.0" alignment="CENTER" maxWidth="450.0" maxHeight="650.0" styleClass="glass-card">
         <padding>
-            <Insets top="40.0" right="40.0" bottom="30.0" left="40.0"/>
+            <Insets top="0.0" right="40.0" bottom="30.0" left="40.0"/>
         </padding>
+
+        <HBox spacing="0" alignment="CENTER" prefHeight="55.0">
+            <Button fx:id="adminTab" text="Admin" onAction="#handleTabSwitch"
+                    styleClass="tab-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="staffTab" text="Staff" onAction="#handleTabSwitch"
+                    styleClass="tab-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+            <Button fx:id="studentTab" text="Student" onAction="#handleTabSwitch"
+                    styleClass="tab-button-active" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
+        </HBox>
 
         <VBox alignment="CENTER" spacing="5.0">
             <Label text="AMAZI" styleClass="brand-logo"/>
             <Label text="Digital Student Portfolio" styleClass="brand-subtitle"/>
         </VBox>
 
-        <VBox spacing="15.0">
+        <VBox spacing="20.0">
             <VBox spacing="8.0">
-                <Label text="University Email" styleClass="input-label"/>
-                <TextField fx:id="emailField" promptText="name@university.edu" styleClass="modern-input"/>
+                <Label text="User Name" styleClass="input-label"/>
+                <TextField fx:id="emailField" promptText="Enter your user name" styleClass="modern-input"/>
             </VBox>
 
             <VBox spacing="8.0">
                 <Label text="Password" styleClass="input-label"/>
-                <PasswordField fx:id="passwordField" promptText="••••••••" styleClass="modern-input"/>
+                <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="modern-input"/>
                 <HBox alignment="CENTER_RIGHT">
                     <Hyperlink text="Forgot Password?" onAction="#handleForgotPassword" styleClass="forgot-link"/>
                 </HBox>
             </VBox>
+
+            <ComboBox fx:id="roleSelector" visible="false" managed="false" />
         </VBox>
 
         <VBox spacing="10.0" alignment="CENTER">

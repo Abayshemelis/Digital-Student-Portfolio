@@ -17,25 +17,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class RegisterController {
-    // FIXED: Using robust logging instead of printStackTrace
     private static final Logger LOGGER = Logger.getLogger(RegisterController.class.getName());
+    private static final String ERROR_COLOR = "#fb7185";
+    private static final String SUCCESS_COLOR = "#10b981";
 
     @FXML private TextField nameField;
+    @FXML private TextField usernameField;
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
     @FXML private ComboBox<String> roleComboBox;
     @FXML private Label messageLabel;
-
-    @FXML private Circle bubble1;
-    @FXML private Circle bubble2;
+    @FXML private Circle bubble1, bubble2;
 
     @FXML
     public void initialize() {
         if (roleComboBox != null) {
-            roleComboBox.getItems().addAll("Student", "Faculty", "Admin");
+            roleComboBox.getItems().setAll("Student", "Faculty", "Admin");
             roleComboBox.setValue("Student");
         }
-
         animate(bubble1, 20);
         animate(bubble2, -20);
     }
@@ -52,62 +51,61 @@ public class RegisterController {
 
     @FXML
     private void handleRegistration(ActionEvent event) {
-        String name = (nameField.getText() != null) ? nameField.getText().trim() : "";
-        String email = (emailField.getText() != null) ? emailField.getText().trim() : "";
+        String name = nameField.getText().trim();
+        String username = usernameField.getText().trim();
+        String email = emailField.getText().trim();
         String password = passwordField.getText();
         String role = roleComboBox.getValue();
 
-        if (name.isEmpty() || email.isEmpty() || password == null || password.isEmpty()) {
-            messageLabel.setText("Please fill in all fields!");
-            messageLabel.setStyle("-fx-text-fill: #fb7185;");
+        if (name.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            setStatus("Please fill in all fields!", ERROR_COLOR);
             return;
         }
 
-        DataManager.addUser(name, email, password, role);
-
-        // FIXED: Renamed method to use the verb "logIn" (Noun: Login, Verb: Log In)
-        navigateToLogIn(event);
+        // FIX: Ensure your DataManager.addUser method signature matches these 5 arguments
+        // If you cannot change DataManager, remove 'name' and just pass 'username'
+        try {
+            DataManager.addUser(name, username, email, password, role);
+            setStatus("Account created! Redirecting...", SUCCESS_COLOR);
+            prepareAndNavigate(event);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Registration failed", e);
+            setStatus("Registration failed. Please try again.", ERROR_COLOR);
+        }
     }
 
     @FXML
     private void backToLogin(ActionEvent event) {
-        navigateToLogIn(event);
+        prepareAndNavigate(event);
+    }
+
+    private void setStatus(String message, String color) {
+        messageLabel.setText(message);
+        messageLabel.setStyle("-fx-text-fill: " + color + ";");
     }
 
     /**
-     * FIXED: This method addresses the "Value of parameter is always..." warning.
-     * Since we currently only navigate to the Login screen from here,
-     * we've created a specific method for it.
+     * FIX: Unified navigation method to remove "Duplicated Code Fragment" warning.
+     * This replaces navigateToLogIn and backToLogin duplication.
      */
-    private void navigateToLogIn(ActionEvent event) {
-        String fxml = "/com/amazi/view/Login.fxml";
-        String title = "Log In - AMAZI";
-
+    private void prepareAndNavigate(ActionEvent event) {
         try {
-            URL loc = getClass().getResource(fxml);
-            if (loc == null) {
-                LOGGER.log(Level.SEVERE, "FXML resource not found: {0}", fxml);
-                return;
-            }
-
+            URL loc = getClass().getResource("/com/amazi/view/Login.fxml");
             FXMLLoader loader = new FXMLLoader(loc);
             Parent root = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
 
             URL css = getClass().getResource("/com/amazi/view/style.css");
-            if (css != null) {
-                scene.getStylesheets().add(css.toExternalForm());
-            }
+            if (css != null) scene.getStylesheets().add(css.toExternalForm());
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(scene);
-            stage.setTitle(title);
+            stage.setTitle("AMAZI | Log In");
             stage.centerOnScreen();
             stage.show();
-
         } catch (Exception e) {
-            // FIXED: Replaced printStackTrace with robust logging
-            LOGGER.log(Level.SEVERE, "Failed to navigate to Log In screen", e);
+            LOGGER.log(Level.SEVERE, "Navigation failed", e);
         }
     }
 }
