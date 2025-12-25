@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.shape.Circle?>
+<?import java.net.URL?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1300.0" styleClass="main-container"
+            xmlns:fx="http://javafx.com/fxml/1"
+            xmlns="http://javafx.com/javafx/17"
+            fx:controller="com.amazi.controller.FacultyReviewController">
+    <stylesheets>
+        <URL value="@/css/style.css" />
+    </stylesheets>
+
+    <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+
+        <VBox prefWidth="280.0" styleClass="sidebar">
+            <padding><Insets left="30.0" right="30.0" top="50.0" /></padding>
+            <Label styleClass="sidebar-logo" text="AMAZI" />
+            <Label styleClass="sidebar-subtitle" text="Instructor Suite">
+                <VBox.margin><Insets bottom="50.0" /></VBox.margin>
+            </Label>
+
+            <VBox spacing="15.0" VBox.vgrow="ALWAYS">
+                <Button maxWidth="Infinity" styleClass="sidebar-btn-active" text="Review Queue" alignment="BASELINE_LEFT" />
+                <Button maxWidth="Infinity" styleClass="sidebar-btn" text="Student Records" alignment="BASELINE_LEFT" />
+                <Button maxWidth="Infinity" styleClass="sidebar-btn" text="Analytics" alignment="BASELINE_LEFT" />
+                <Button maxWidth="Infinity" styleClass="sidebar-btn" text="Settings" alignment="BASELINE_LEFT" />
+            </VBox>
+
+            <Button maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-btn" text="Log Out">
+                <VBox.margin><Insets bottom="40.0" /></VBox.margin>
+            </Button>
+        </VBox>
+
+        <VBox spacing="30.0" HBox.hgrow="ALWAYS" styleClass="workspace">
+            <padding><Insets bottom="35.0" left="45.0" right="45.0" top="35.0" /></padding>
+
+            <HBox alignment="CENTER_LEFT">
+                <VBox>
+                    <Label styleClass="page-title" text="Submission Review" />
+                    <Label styleClass="page-subtitle" text="Pending Evaluations" />
+                </VBox>
+                <Region HBox.hgrow="ALWAYS" />
+                <TextField fx:id="searchField" prefWidth="320.0" promptText="Search student..." styleClass="search-field" />
+                <Region prefWidth="20.0" />
+                <Circle fx:id="statusCircle" radius="7.0" fill="#10b981" />
+            </HBox>
+
+            <HBox spacing="30.0" VBox.vgrow="ALWAYS">
+                <VBox HBox.hgrow="ALWAYS" styleClass="table-container">
+                    <TableView fx:id="submissionTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                        <columns>
+                            <TableColumn fx:id="colStudent" prefWidth="180.0" text="STUDENT" />
+                            <TableColumn fx:id="colTitle" prefWidth="280.0" text="PROJECT" />
+                            <TableColumn fx:id="colStatus" prefWidth="140.0" text="STATUS" />
+                        </columns>
+                        <columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>
+                    </TableView>
+                </VBox>
+
+                <VBox fx:id="detailsPane" prefWidth="450.0" spacing="20.0" styleClass="evaluation-toolkit-card">
+                    <padding><Insets bottom="35.0" left="35.0" right="35.0" top="35.0" /></padding>
+
+                    <Label text="EVALUATION TOOLKIT" styleClass="toolkit-header-small" />
+
+                    <VBox spacing="8.0">
+                        <Label fx:id="studentLabel" styleClass="detail-name-large" text="Select a Student" />
+                        <Label fx:id="titleLabel" styleClass="detail-project-sub" text="Project description" wrapText="true" />
+                    </VBox>
+
+                    <VBox spacing="12.0" VBox.vgrow="ALWAYS">
+                        <Label text="Reviewer Feedback" styleClass="input-label-bold" />
+                        <TextArea fx:id="feedbackArea" prefHeight="240.0" promptText="Enter feedback for student..." styleClass="toolkit-text-area" wrapText="true" />
+
+                        <Label text="Final Grade" styleClass="input-label-bold" />
+                        <TextField fx:id="gradeField" promptText="e.g. A+" styleClass="toolkit-text-field" />
+                    </VBox>
+
+                    <VBox spacing="12.0">
+                        <Button maxWidth="Infinity" onAction="#handleApprove" styleClass="btn-approve-large" text="Approve Submission" />
+                        <HBox spacing="12.0">
+                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleRevision" styleClass="btn-needs-revision" text="Needs Revision" />
+                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleReject" styleClass="btn-reject-red" text="Reject" />
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </HBox>
+        </VBox>
+    </HBox>
+</AnchorPane>

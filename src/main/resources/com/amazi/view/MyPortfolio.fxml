@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import java.net.URL?>
+
+<VBox prefHeight="650.0" prefWidth="700.0" spacing="25.0" styleClass="gallery-container"
+      xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.amazi.controller.SubmissionController">
+
+    <stylesheets>
+        <URL value="@/css/style.css" />
+    </stylesheets>
+
+    <padding>
+        <Insets bottom="20.0" left="30.0" right="30.0" top="20.0" />
+    </padding>
+
+    <Label text="My Work Gallery" styleClass="gallery-header" />
+
+    <ListView fx:id="portfolioListView" styleClass="gallery-list-view" VBox.vgrow="ALWAYS" />
+
+    <HBox alignment="CENTER_RIGHT" spacing="20.0">
+        <Button onAction="#handleBack" text="Back to Dashboard" styleClass="btn-secondary" prefHeight="45.0" prefWidth="180.0" />
+        <Button onAction="#handleFinalSubmit" text="Submit Selected" styleClass="btn-primary-blue" prefHeight="45.0" prefWidth="180.0" />
+    </HBox>
+</VBox>
