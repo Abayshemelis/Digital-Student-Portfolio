@@ -1,8 +1,6 @@
-1|Admin|admin|admin@amazi.com|admin123|Admin
-2|Faculty User|faculty|faculty@amazi.com|faculty123|Faculty
-3|Student User|student|student@amazi.com|student123|Student
-4|Abay shimelis|amazi|hu|1212|Student
-5|Abay shimelis|amazi|hu|1212|Student
-6|Mr Elias Jarso|EliasJ|hu|1234|Faculty
-7|Elias Jarso|EliasJ|hu|1234|Faculty
-8|Abay|ab|hu|1212|Admin
+4|Elias Jarso|EliasJ|Hu|1234|Faculty
+10|Abay shimelis|aby|hu|121212|Admin
+11|Yoseph wendimu|yoseph|hawassa  University|111111|Student
+12|Edgat Adisu|edu|Hawassa   University|222222|Student
+13|Nejwa Abrar|nejwa|Hawassa University|333333|Student
+14|Kirubel Getahun|kira|Hawassa University|444444|Student

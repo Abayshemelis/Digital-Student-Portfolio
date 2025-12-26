@@ -31,10 +31,13 @@ public class RegisterController {
 
     @FXML
     public void initialize() {
+        // Initialize Role Selection
         if (roleComboBox != null) {
             roleComboBox.getItems().setAll("Student", "Faculty", "Admin");
             roleComboBox.setValue("Student");
         }
+
+        // Start Background Animations
         animate(bubble1, 20);
         animate(bubble2, -20);
     }
@@ -57,17 +60,27 @@ public class RegisterController {
         String password = passwordField.getText();
         String role = roleComboBox.getValue();
 
+        // 1. Validation
         if (name.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty()) {
             setStatus("Please fill in all fields!", ERROR_COLOR);
             return;
         }
 
-        // FIX: Ensure your DataManager.addUser method signature matches these 5 arguments
-        // If you cannot change DataManager, remove 'name' and just pass 'username'
+        if (password.length() < 6) {
+            setStatus("Password must be at least 6 characters.", ERROR_COLOR);
+            return;
+        }
+
         try {
+            // 2. Data Persistence
+            // This matches the DataManager method that saves to users.txt
             DataManager.addUser(name, username, email, password, role);
+
             setStatus("Account created! Redirecting...", SUCCESS_COLOR);
+
+            // 3. Automated Navigation after a short delay or immediate
             prepareAndNavigate(event);
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Registration failed", e);
             setStatus("Registration failed. Please try again.", ERROR_COLOR);
@@ -80,23 +93,30 @@ public class RegisterController {
     }
 
     private void setStatus(String message, String color) {
-        messageLabel.setText(message);
-        messageLabel.setStyle("-fx-text-fill: " + color + ";");
+        if (messageLabel != null) {
+            messageLabel.setText(message);
+            messageLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
+        }
     }
 
     /**
-     * FIX: Unified navigation method to remove "Duplicated Code Fragment" warning.
-     * This replaces navigateToLogIn and backToLogin duplication.
+     * Unified navigation method to maintain DRY (Don't Repeat Yourself) principles.
      */
     private void prepareAndNavigate(ActionEvent event) {
         try {
             URL loc = getClass().getResource("/com/amazi/view/Login.fxml");
+            if (loc == null) {
+                LOGGER.severe("FXML file not found: /com/amazi/view/Login.fxml");
+                return;
+            }
+
             FXMLLoader loader = new FXMLLoader(loc);
             Parent root = loader.load();
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
 
+            // Re-apply style.css to ensure visual consistency
             URL css = getClass().getResource("/com/amazi/view/style.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
 
@@ -106,6 +126,7 @@ public class RegisterController {
             stage.show();
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Navigation failed", e);
+            setStatus("Navigation error. Please restart the app.", ERROR_COLOR);
         }
     }
 }

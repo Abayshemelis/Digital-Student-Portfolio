@@ -1,42 +1,96 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.geometry.Insets?>
 
-<?import java.net.URL?>
-<AnchorPane prefHeight="600.0" prefWidth="900.0"
-            styleClass="main-container"
-            xmlns="http://javafx.com/javafx/21"
-            xmlns:fx="http://javafx.com/fxml/1"
+<AnchorPane prefHeight="750.0" prefWidth="1300.0" styleClass="main-container"
+            xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="com.amazi.controller.AdminDashBoardController">
-
     <stylesheets>
         <URL value="@/css/style.css" />
     </stylesheets>
 
-    <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-          AnchorPane.topAnchor="0.0">
-        <padding>
-            <Insets bottom="30.0" left="30.0" right="30.0" top="30.0"/>
-        </padding>
+    <HBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
 
-        <HBox alignment="CENTER_LEFT" styleClass="header-bar">
-            <Label styleClass="header-title" text="Admin Management System"/>
-            <Region HBox.hgrow="ALWAYS"/>
-            <Button onAction="#handleLogout" styleClass="btn-logout" text="Log Out"/>
-        </HBox>
+        <VBox prefWidth="300.0" styleClass="sidebar">
+            <ScrollPane fitToWidth="true" hbarPolicy="NEVER" styleClass="sidebar-scroll" vbarPolicy="AS_NEEDED" VBox.vgrow="ALWAYS">
+                <VBox spacing="25.0">
+                    <padding>
+                        <Insets bottom="30.0" left="25.0" right="25.0" top="40.0" />
+                    </padding>
 
-        <TableView fx:id="userTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
-            <columns>
-                <TableColumn fx:id="idColumn" prefWidth="80.0" text="ID"/>
-                <TableColumn fx:id="nameColumn" prefWidth="250.0" text="Full Name"/>
-                <TableColumn fx:id="emailColumn" prefWidth="300.0" text="Email Address"/>
-                <TableColumn fx:id="roleColumn" prefWidth="150.0" text="User Role"/>
-            </columns>
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN"/>
-            </columnResizePolicy>
-        </TableView>
-    </VBox>
+                    <VBox spacing="5.0">
+                        <Label styleClass="sidebar-logo" text="AMAZI" />
+                        <Label styleClass="sidebar-subtitle" text="Admin Management System" />
+                    </VBox>
+
+                    <VBox spacing="12.0" styleClass="sidebar-stats-container">
+                        <VBox styleClass="sidebar-stat-box">
+                            <Label styleClass="sidebar-stat-label" text="TOTAL STUDENTS" />
+                            <Label fx:id="totalStudentsLabel" styleClass="sidebar-stat-value" text="0" />
+                        </VBox>
+                        <VBox styleClass="sidebar-stat-box">
+                            <Label styleClass="sidebar-stat-label" text="TOTAL FACULTY" />
+                            <Label fx:id="totalFacultyLabel" styleClass="sidebar-stat-value" text="0" />
+                        </VBox>
+                        <VBox styleClass="sidebar-stat-box">
+                            <Label styleClass="sidebar-stat-label" text="TOTAL ADMINS" />
+                            <Label fx:id="totalAdminLabel" styleClass="sidebar-stat-value" style="-fx-text-fill: #f1c40f;" text="0" />
+                        </VBox>
+                        <VBox onMouseClicked="#handleShowPendingOnly" styleClass="sidebar-stat-box" style="-fx-cursor: hand;">
+                            <Label styleClass="sidebar-stat-label" text="PENDING REVIEWS" />
+                            <Label fx:id="pendingSubmissionsLabel" styleClass="sidebar-stat-value" style="-fx-text-fill: #48dbfb;" text="0" />
+                        </VBox>
+                    </VBox>
+
+                    <Separator opacity="0.2" />
+
+                    <VBox spacing="10.0">
+                        <Label styleClass="section-header-small" text="QUICK ACTIONS" />
+                        <Button maxWidth="Infinity" onAction="#handleApproveUser" styleClass="sidebar-btn, btn-approve" text="Approve Selected" />
+                        <Button maxWidth="Infinity" onAction="#handleRejectUser" styleClass="sidebar-btn, btn-reject" text="Reject Selected" />
+                        <Button maxWidth="Infinity" onAction="#handleExportData" styleClass="sidebar-btn, btn-export" text="Export Directory" />
+                        <Button maxWidth="Infinity" onAction="#handleResetFilter" styleClass="sidebar-btn, btn-reset" text="Reset Table View" />
+                    </VBox>
+                </VBox>
+            </ScrollPane>
+        </VBox>
+
+        <ScrollPane fitToHeight="true" fitToWidth="true" HBox.hgrow="ALWAYS" styleClass="workspace-scroll">
+            <VBox spacing="25.0" styleClass="workspace">
+                <padding>
+                    <Insets bottom="30.0" left="40.0" right="40.0" top="30.0" />
+                </padding>
+
+                <HBox alignment="CENTER_LEFT">
+                    <VBox spacing="5.0">
+                        <Label styleClass="page-title" text="User Directory" />
+                        <Label fx:id="userCountLabel" styleClass="page-subtitle" text="Total entries found: 0" />
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS" />
+                    <Button onAction="#handleLogout" styleClass="btn-signout-top" text="Sign Out" />
+                </HBox>
+
+                <HBox alignment="CENTER_LEFT" styleClass="search-container">
+                    <TextField fx:id="searchField" prefHeight="45.0" prefWidth="500.0"
+                               promptText="Search by name, email or role..." styleClass="search-field" />
+                </HBox>
+
+                <TableView fx:id="userTable" VBox.vgrow="ALWAYS" styleClass="modern-table">
+                    <columns>
+                        <TableColumn fx:id="idColumn" prefWidth="80.0" text="ID" />
+                        <TableColumn fx:id="nameColumn" prefWidth="250.0" text="FULL NAME" />
+                        <TableColumn fx:id="emailColumn" prefWidth="350.0" text="EMAIL ADDRESS" />
+                        <TableColumn fx:id="roleColumn" prefWidth="150.0" text="USER ROLE" />
+                    </columns>
+                    <columnResizePolicy>
+                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN" />
+                    </columnResizePolicy>
+                </TableView>
+            </VBox>
+        </ScrollPane>
+    </HBox>
 </AnchorPane>

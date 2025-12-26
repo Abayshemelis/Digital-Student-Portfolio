@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import java.io.IOException;
+import java.net.URL;
 
 @SuppressWarnings("all")
 public class FacultyReviewController {
@@ -23,21 +24,22 @@ public class FacultyReviewController {
     @FXML private TableColumn<Submission, String> colStudent, colTitle, colStatus;
     @FXML private TextField searchField, gradeField;
     @FXML private TextArea feedbackArea;
-    @FXML private Label studentLabel, titleLabel; // Matches Abay Shimelis / plan designing labels
-    @FXML private VBox detailsPane; // This is your "Evaluation Toolkit" container
+    @FXML private Label studentLabel, titleLabel;
+    @FXML private VBox detailsPane;
     @FXML private Circle statusCircle;
 
     private Submission selectedSubmission;
 
     @FXML
     public void initialize() {
-        // 1. Column Mapping - Matches the STUDENT, PROJECT, STATUS headers in your image
+        // 1. Column Mapping
         colStudent.setCellValueFactory(new PropertyValueFactory<>("studentName"));
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        // 2. Search Logic (Matching the "Search student..." field in top right)
+        // 2. Search Logic (Filtering based on DataManager list)
         FilteredList<Submission> filteredData = new FilteredList<>(DataManager.getAllSubmissions(), p -> true);
+
         searchField.textProperty().addListener((obs, old, newVal) -> {
             filteredData.setPredicate(s -> {
                 if (newVal == null || newVal.isEmpty()) return true;
@@ -46,76 +48,103 @@ public class FacultyReviewController {
                         s.getTitle().toLowerCase().contains(lower);
             });
         });
+
         submissionTable.setItems(filteredData);
 
         // 3. Selection Logic: Populate the Evaluation Toolkit
         submissionTable.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> {
             if (newVal != null) {
                 showDetails(newVal);
+            } else {
+                hideDetails();
             }
         });
 
-        // Set active indicator color (the green dot in your top right)
-        if (statusCircle != null) statusCircle.setFill(javafx.scene.paint.Color.web("#10b981"));
+        // Online Status Indicator
+        if (statusCircle != null) {
+            statusCircle.setFill(javafx.scene.paint.Color.web("#10b981")); // Success Green
+        }
     }
 
     private void showDetails(Submission s) {
         selectedSubmission = s;
-        detailsPane.setVisible(true);
-        detailsPane.setManaged(true);
+        if (detailsPane != null) {
+            detailsPane.setVisible(true);
+            detailsPane.setManaged(true);
+        }
 
-        // Setting text to match the image hierarchy
-        studentLabel.setText(s.getStudentName()); // e.g., "Ben Carter"
-        titleLabel.setText(s.getTitle());         // e.g., "Intro to AI"
+        studentLabel.setText(s.getStudentName());
+        titleLabel.setText(s.getTitle());
 
         feedbackArea.setText(s.getFeedback() != null ? s.getFeedback() : "");
         gradeField.setText(s.getGrade() != null ? s.getGrade() : "");
     }
 
-    // Button Actions from your Toolkit
+    private void hideDetails() {
+        if (detailsPane != null) {
+            detailsPane.setVisible(false);
+            detailsPane.setManaged(false);
+        }
+    }
+
+    // Toolkit Button Actions
     @FXML private void handleApprove() { updateSubmission("APPROVED"); }
     @FXML private void handleReject() { updateSubmission("REJECTED"); }
-    @FXML private void handleRevision() { updateSubmission("NEEDS REVISION"); }
+    @FXML private void handleRevision() { updateSubmission("REVISION"); }
 
     private void updateSubmission(String newStatus) {
-        if (selectedSubmission == null) return;
+        if (selectedSubmission == null) {
+            showAlert(Alert.AlertType.WARNING, "Selection Required", "Please select a submission to evaluate.");
+            return;
+        }
 
-        // 1. Update the Model
+        // 1. Update the Model with Toolkit data
         selectedSubmission.setStatus(newStatus);
         selectedSubmission.setFeedback(feedbackArea.getText());
         selectedSubmission.setGrade(gradeField.getText().toUpperCase());
-        selectedSubmission.setViewedByStudent(false);
 
-        // 2. Save to DataManager (This makes it appear on the Student side)
+        // 2. Persist to DataManager (Writes to submissions.txt)
         DataManager.updateSubmissionInFile(selectedSubmission);
 
         // 3. UI Refresh
         submissionTable.refresh();
         clearToolkit();
 
-        // Optional: Confirmation
-        Alert alert = new Alert(Alert.AlertType.INFORMATION, "Evaluation Published!");
-        alert.setHeaderText(null);
-        alert.show();
+        showAlert(Alert.AlertType.INFORMATION, "Success", "Evaluation for " + selectedSubmission.getStudentName() + " has been published!");
     }
 
     private void clearToolkit() {
-        detailsPane.setVisible(false);
-        detailsPane.setManaged(false);
+        hideDetails();
         submissionTable.getSelectionModel().clearSelection();
         selectedSubmission = null;
+        feedbackArea.clear();
+        gradeField.clear();
     }
 
     @FXML
     private void handleLogout(ActionEvent event) {
+        navigateTo("/com/amazi/view/Login.fxml", "Login", event);
+    }
+
+    private void navigateTo(String fxml, String title, ActionEvent event) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/com/amazi/view/Login.fxml"));
+            URL loc = getClass().getResource(fxml);
+            Parent root = FXMLLoader.load(loc);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
-            stage.setTitle("AMAZI | Login");
+            stage.setTitle("AMAZI | " + title);
+            stage.centerOnScreen();
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void showAlert(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.show();
     }
 }

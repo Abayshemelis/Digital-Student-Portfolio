@@ -1,15 +1,4 @@
-Digital student portifolio Design|Engineering|Student User|NEEDS REVISION|coool|B+
-hhh|Art|Student User|APPROVED|good|A
-plan designing|Art|Abay Shimelis|APPROVED|you did it good keep it up|A
-java code|Engineering|Abay Shimelis|APPROVED||N/A
-pyton progect|Engineering|Abay Shimelis|APPROVED|it was good|A
-gdbh|Engineering|Abay Shimelis|APPROVED||A
-hjndhjhsd|Engineering|Abay Shimelis|APPROVED||N/A
-gd|Engineering|Abay Shimelis|APPROVED|hjh|A
-database|General|Abay Shimelis|APPROVED|Good|A
-Programming|Computer Science|Abay Shimelis|APPROVED|goddddd|A+
-Data analayis part|Art|Abay Shimelis|APPROVED|Good|A
-Data Managemnt|General|Abay Shimelis|APPROVED|You Get Good Grade keep it up my boy|A+
-code block|General|Abay Shimelis|APPROVED|Good|A
-python|General|Abay Shimelis|APPROVED|Perfecto|A+
-dcn|General|Abay Shimelis|APPROVED|good|A-
+Data management |Computer Science|Abay Shimelis|APPROVED|good|A
+dggd|General|Abay Shimelis|APPROVED|good|A
+python|General|Abay Shimelis|APPROVED||A
+DataBase|General|Abay Shimelis|APPROVED|keep it up |A+

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import java.net.URL?>
 
-<VBox prefHeight="650.0" prefWidth="700.0" spacing="25.0" styleClass="gallery-container"
+<VBox prefHeight="700.0" prefWidth="1300.0" spacing="25.0" styleClass="gallery-container"
       xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="com.amazi.controller.SubmissionController">
 

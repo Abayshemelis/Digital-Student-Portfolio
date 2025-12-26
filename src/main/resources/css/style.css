@@ -177,257 +177,146 @@
 }
 
 
-/*AdminDashBoardStyle part (122-203)*/
+/*AdminDashBoardStyle part (180-298)*/
 /* Matches styleClass="main-container" */
+/* --- Main Layout Colors --- */
+/* --- 1. GLOBAL ROOT --- */
 .main-container {
-    -fx-background-color: #f4f6f9; /* Light grey professional background */
-    -fx-font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-background-color: #f8fafc;
+    -fx-font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
 }
 
-/* Matches styleClass="header-bar" */
-.header-bar {
-    -fx-background-color: #2c3e50; /* Deep blue/slate header */
-    -fx-padding: 15 25;
-    -fx-background-radius: 10;
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.2), 10, 0, 0, 5);
+/* --- 2. SIDEBAR: SKY BLUE TO SMOOTH GREEN --- */
+.sidebar {
+    -fx-background-color: linear-gradient(to bottom right, #4fc3f7, #66bb6a) !important;
+    -fx-min-width: 300;
+    -fx-max-width: 300;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.1), 20, 0, 0, 0);
 }
 
-/* Matches styleClass="header-title" */
-.header-title {
-    -fx-text-fill: white;
-    -fx-font-size: 24px;
-    -fx-font-weight: bold;
+/* ScrollPane Fix: Ensures no black backgrounds leak through */
+.sidebar .sidebar-scroll,
+.sidebar .sidebar-scroll .viewport,
+.sidebar .sidebar-scroll .content {
+    -fx-background-color: transparent !important;
+    -fx-background: transparent !important;
+    -fx-border-color: transparent !important;
 }
 
-/* Matches styleClass="btn-logout" */
-.btn-logout {
-    -fx-background-color: #e74c3c; /* Professional red */
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-padding: 8 20;
-    -fx-background-radius: 5;
+/* --- 3. STATS SECTION (Glassmorphism + Glow) --- */
+.sidebar-stats-container {
+    -fx-padding: 10 0;
+}
+
+.sidebar-stat-box {
+    -fx-background-color: rgba(255, 255, 255, 0.2) !important;
+    -fx-padding: 18;
+    -fx-background-radius: 15;
+    -fx-border-color: rgba(255, 255, 255, 0.3);
+    -fx-transition: all 0.3s ease-in-out;
+}
+
+.sidebar-stat-box:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.35) !important;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.5), 15, 0, 0, 0);
+    -fx-translate-y: -2;
     -fx-cursor: hand;
 }
 
-.btn-logout:hover {
-    -fx-background-color: #c0392b; /* Darker red on hover */
+.sidebar-stat-label { -fx-text-fill: white; -fx-font-size: 11px; -fx-font-weight: bold; -fx-opacity: 0.9; }
+.sidebar-stat-value { -fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: 800; }
+
+/* --- 4. QUICK ACTIONS (Now with ALL hovers fixed) --- */
+.section-header-small {
+    -fx-text-fill: white;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-padding: 5 0;
+    -fx-letter-spacing: 1px;
 }
 
-/* Matches styleClass="modern-table" */
+.sidebar-btn {
+    -fx-padding: 12 15;
+    -fx-background-radius: 10;
+    -fx-cursor: hand;
+    -fx-text-fill: white !important;
+    -fx-font-weight: bold;
+    -fx-transition: all 0.25s ease;
+}
+
+/* 1. APPROVE BEAUTY HOVER (Emerald Green) */
+.btn-approve { -fx-background-color: rgba(255, 255, 255, 0.15) !important; -fx-border-color: rgba(255, 255, 255, 0.4); }
+.btn-approve:hover {
+    -fx-background-color: #2ecc71 !important;
+    -fx-border-color: #2ecc71;
+    -fx-effect: dropshadow(three-pass-box, rgba(46, 204, 113, 0.6), 15, 0, 0, 0);
+}
+
+/* 2. REJECT BEAUTY HOVER (Vibrant Red) */
+.btn-reject { -fx-background-color: rgba(255, 255, 255, 0.1) !important; -fx-border-color: rgba(255, 255, 255, 0.3); }
+.btn-reject:hover {
+    -fx-background-color: #e74c3c !important;
+    -fx-border-color: #ff7675;
+    -fx-effect: dropshadow(three-pass-box, rgba(231, 76, 60, 0.6), 15, 0, 0, 0);
+}
+
+/* 3. EXPORT BEAUTY HOVER (Azure Blue) */
+.btn-export { -fx-background-color: rgba(255, 255, 255, 0.1) !important; -fx-border-color: rgba(255, 255, 255, 0.3); }
+.btn-export:hover {
+    -fx-background-color: #0984e3 !important;
+    -fx-effect: dropshadow(three-pass-box, rgba(9, 132, 227, 0.6), 15, 0, 0, 0);
+}
+
+/* 4. RESET TABLE BEAUTY HOVER (Soft White) */
+.btn-reset { -fx-background-color: transparent; -fx-border-color: rgba(255, 255, 255, 0.5); }
+.btn-reset:hover {
+    -fx-background-color: rgba(255, 255, 255, 0.25) !important;
+    -fx-effect: dropshadow(three-pass-box, rgba(255, 255, 255, 0.3), 12, 0, 0, 0);
+}
+
+/* --- 5. TOP SIGN OUT (Premium Pill Decoration) --- */
+.btn-signout-top {
+    -fx-background-color: white !important;
+    -fx-text-fill: #ef4444 !important;
+    -fx-border-color: #fecaca;
+    -fx-border-width: 1.5;
+    -fx-border-radius: 50;
+    -fx-background-radius: 50;
+    -fx-padding: 10 28;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-transition: all 0.3s;
+}
+
+.btn-signout-top:hover {
+    -fx-background-color: #ef4444 !important;
+    -fx-text-fill: white !important;
+    -fx-border-color: #ef4444 !important;
+    -fx-effect: dropshadow(three-pass-box, rgba(239, 68, 68, 0.4), 15, 0, 0, 0);
+}
+
+/* --- 6. TABLE & SEARCH --- */
+.search-field {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #cbd5e1;
+}
+
+.search-field:focused {
+    -fx-border-color: #4fc3f7;
+    -fx-effect: dropshadow(three-pass-box, rgba(79, 195, 247, 0.3), 12, 0, 0, 0);
+}
+
 .modern-table {
     -fx-background-color: white;
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-border-color: #dcdde1;
-    -fx-padding: 5;
-}
-
-/* Styling the Table Header */
-.modern-table .column-header-background {
-    -fx-background-color: #34495e;
-    -fx-background-radius: 10 10 0 0;
-}
-
-.modern-table .column-header {
-    -fx-background-color: transparent;
-    -fx-size: 45;
-}
-
-.modern-table .column-header .label {
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-}
-
-/* Styling the Table Rows */
-.modern-table .table-row-cell {
-    -fx-cell-size: 40;
-    -fx-border-color: transparent transparent #f1f1f1 transparent;
-}
-
-.modern-table .table-row-cell:odd {
-    -fx-background-color: #fafafa;
-}
-
-.modern-table .table-row-cell:filled:hover {
-    -fx-background-color: #edeff2;
+    -fx-background-radius: 20;
+    -fx-border-color: #e2e8f0;
 }
 
 .modern-table .table-row-cell:selected {
-    -fx-background-color: #3498db;
+    -fx-background-color: #55efc4;
 }
-
-.modern-table .table-row-cell:selected .label {
-    -fx-text-fill: white;
-}
-
-
-
-/* --- THE SOFT VELVET THEME --- */
-
-.soft-root {
-    -fx-background-color: #f3f4f6; /* Soft light grey background */
-}
-
-/* Mist Bubbles: Very low opacity for a 'magic' feel */
-.soft-mist-1 {
-    -fx-fill: #dbeafe; /* Very light sky */
-    -fx-opacity: 0.5;
-    -fx-effect: dropshadow(three-pass-box, #dbeafe, 100, 0, 0, 0);
-}
-
-.soft-mist-2 {
-    -fx-fill: #e0e7ff; /* Very light lavender */
-    -fx-opacity: 0.4;
-    -fx-effect: dropshadow(three-pass-box, #e0e7ff, 80, 0, 0, 0);
-}
-
-/* The Card: Neumorphic / Soft UI Style */
-.soft-card {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 30;
-    /* Soft 'airy' shadow */
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.04), 40, 0, 0, 15);
-}
-
-.soft-logo {
-    -fx-text-fill: #1e293b;
-    -fx-font-size: 28px;
-    -fx-font-weight: bold;
-    -fx-letter-spacing: 2px;
-}
-
-.soft-tagline {
-    -fx-text-fill: #94a3b8;
-    -fx-font-size: 13px;
-    -fx-text-alignment: center;
-}
-
-/* Soft Inputs: No dark borders */
-.soft-input {
-    -fx-background-color: #f8fafc;
-    -fx-background-radius: 12;
-    -fx-border-color: #f1f5f9;
-    -fx-border-width: 1;
-    -fx-border-radius: 12;
-    -fx-padding: 12;
-    -fx-text-fill: #334155;
-}
-
-.soft-input:focused {
-    -fx-background-color: #ffffff;
-    -fx-border-color: #cbd5e1;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.02), 5, 0, 0, 0);
-}
-
-/* The Soft Button */
-.soft-button {
-    -fx-background-color: #6366f1; /* Soft Indigo */
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 12;
-    -fx-padding: 14;
-    -fx-cursor: hand;
-}
-
-.soft-button:hover {
-    -fx-background-color: #4f46e5;
-    -fx-translate-y: -1;
-}
-
-.soft-link {
-    -fx-text-fill: #6366f1;
-    -fx-underline: false;
-    -fx-font-size: 13px;
-}
-
-.soft-error {
-    -fx-text-fill: #fda4af; /* Soft red */
-    -fx-font-size: 12px;
-}
-
-/* --- MAGIC LIQUID STYLE --- */
-
-.rg-water-root {
-    -fx-background-color: #f8fafc; /* Cloud White */
-}
-
-/* Floating Soft Water Bubbles */
-.rg-bubble-top {
-    -fx-fill: linear-gradient(to bottom right, #bae6fd, #7dd3fc);
-    -fx-opacity: 0.3;
-    -fx-effect: dropshadow(three-pass-box, rgba(125, 211, 252, 0.4), 100, 0, 0, 0);
-}
-
-.rg-bubble-bottom {
-    -fx-fill: linear-gradient(to top left, #e0f2fe, #bae6fd);
-    -fx-opacity: 0.4;
-    -fx-effect: dropshadow(three-pass-box, rgba(186, 230, 253, 0.4), 80, 0, 0, 0);
-}
-
-/* Glass Card */
-.rg-glass-card {
-    -fx-background-color: rgba(255, 255, 255, 0.7);
-    -fx-background-radius: 40; /* Very round like a water drop */
-    -fx-border-color: rgba(255, 255, 255, 0.8);
-    -fx-border-width: 2;
-    -fx-border-radius: 40;
-    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.05), 30, 0, 0, 10);
-}
-
-.rg-water-logo {
-    -fx-text-fill: #0c4a6e;
-    -fx-font-size: 32px;
-    -fx-font-weight: bold;
-    -fx-letter-spacing: 2px;
-}
-
-.rg-water-subtitle {
-    -fx-text-fill: #64748b;
-    -fx-font-size: 14px;
-}
-
-/* Liquid Inputs */
-.rg-input-field {
-    -fx-background-color: #ffffff;
-    -fx-background-radius: 20;
-    -fx-border-color: #e2e8f0;
-    -fx-border-radius: 20;
-    -fx-padding: 14;
-    -fx-text-fill: #0c4a6e;
-}
-
-.rg-input-field:focused {
-    -fx-border-color: #38bdf8;
-    -fx-effect: dropshadow(three-pass-box, rgba(56, 189, 248, 0.2), 10, 0, 0, 0);
-}
-
-/* The Liquid Button */
-.rg-liquid-btn {
-    -fx-background-color: linear-gradient(to right, #0ea5e9, #2563eb);
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-font-size: 16px;
-    -fx-background-radius: 20;
-    -fx-padding: 16;
-    -fx-cursor: hand;
-    -fx-effect: dropshadow(three-pass-box, rgba(37, 99, 235, 0.3), 15, 0, 0, 5);
-}
-
-.rg-liquid-btn:hover {
-    -fx-background-color: linear-gradient(to right, #0284c7, #1d4ed8);
-    -fx-translate-y: -2; /* Smooth float up */
-}
-
-.rg-water-link {
-    -fx-text-fill: #0ea5e9;
-    -fx-font-weight: bold;
-    -fx-underline: false;
-}
-
-.rg-error-txt {
-    -fx-text-fill: #ef4444;
-}
-/*DashBoard style part*(98-267)*/
+/*DashBoard style part*(298-473)*/
 /* --- Base Layout --- */
 /* Main Layout Container */
 /* --- 1. GLOBAL SMOOTHING --- */
@@ -604,7 +493,7 @@
 
 
 
-/*portfolio Style part (576- 676)
+/*portfolio Style part (476- 646)
 /* Isolated Portfolio Root */
 /* --- 1. THE COMPACT PORTFOLIO STAGE --- */
 ./* Main Background */

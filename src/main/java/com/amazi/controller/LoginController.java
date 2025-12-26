@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class LoginController {
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
     private static final String ERROR_COLOR = "#fb7185";
+    private static final String SUCCESS_COLOR = "#4ade80";
 
     @FXML private TextField emailField;
     @FXML private PasswordField passwordField;
@@ -27,24 +28,38 @@ public class LoginController {
 
     @FXML
     public void initialize() {
-        // Default to Student role on startup
-        roleSelector.setValue("Student");
+        // Default UI state
+        if (roleSelector != null) {
+            roleSelector.setValue("Student");
+        }
+        // Initialize the first tab as active visually
+        if (studentTab != null) {
+            studentTab.getStyleClass().add("tab-button-active");
+        }
     }
 
+    /**
+     * Updates the UI tabs and the internal role selection.
+     */
     @FXML
     private void handleTabSwitch(ActionEvent event) {
         Button clicked = (Button) event.getSource();
         messageLabel.setText("");
 
-        // Reset all tab styles
-        adminTab.getStyleClass().setAll("tab-button", "button");
-        staffTab.getStyleClass().setAll("tab-button", "button");
-        studentTab.getStyleClass().setAll("tab-button", "button");
+        // Reset all buttons to standard tab-button style
+        adminTab.getStyleClass().removeAll("tab-button-active");
+        staffTab.getStyleClass().removeAll("tab-button-active");
+        studentTab.getStyleClass().removeAll("tab-button-active");
 
-        // Set active style to clicked tab
-        clicked.getStyleClass().setAll("tab-button-active", "button");
+        adminTab.getStyleClass().add("tab-button");
+        staffTab.getStyleClass().add("tab-button");
+        studentTab.getStyleClass().add("tab-button");
 
-        // Update internal role logic
+        // Apply active style to the selected tab
+        clicked.getStyleClass().remove("tab-button");
+        clicked.getStyleClass().add("tab-button-active");
+
+        // Update the hidden or visible role selector
         if (clicked == adminTab) {
             roleSelector.setValue("Admin");
         } else if (clicked == staffTab) {
@@ -56,27 +71,32 @@ public class LoginController {
 
     @FXML
     private void handleLogin(ActionEvent event) {
-        String email = emailField.getText().trim();
+        String identifier = emailField.getText().trim(); // Can be username or email
         String password = passwordField.getText();
         String selectedRole = roleSelector.getValue();
 
-        if (email.isEmpty() || password.isEmpty()) {
-            showError("Please enter both user name and password.");
+        if (identifier.isEmpty() || password.isEmpty()) {
+            showStatus("Username/Email and Password are required.", ERROR_COLOR);
             return;
         }
 
-        User user = DataManager.validateUser(email, password);
+        // Logic check against DataManager
+        User user = DataManager.validateUser(identifier, password);
 
         if (user != null) {
             validateRoleAndNavigate(user, selectedRole, event);
         } else {
-            showError("Invalid user name or password.");
+            showStatus("Invalid credentials. Please try again.", ERROR_COLOR);
         }
     }
 
+    /**
+     * Ensures the user's account role matches the tab they are trying to log in from.
+     */
     private void validateRoleAndNavigate(User user, String selectedRole, ActionEvent event) {
         String actualRole = user.getRole();
 
+        // Security check: Match database role with UI selection
         if (actualRole != null && actualRole.equalsIgnoreCase(selectedRole)) {
             String fxmlPath = switch (selectedRole.toLowerCase()) {
                 case "admin" -> "/com/amazi/view/AdminDashboard.fxml";
@@ -89,7 +109,7 @@ public class LoginController {
                 changeScene(fxmlPath, selectedRole + " Portal", event);
             }
         } else {
-            showError("Access Denied: You are not authorized as " + selectedRole);
+            showStatus("Access Denied: Account is not registered as " + selectedRole, ERROR_COLOR);
         }
     }
 
@@ -100,38 +120,45 @@ public class LoginController {
 
     @FXML
     private void handleForgotPassword(ActionEvent event) {
-        messageLabel.setText("Reset link sent to your email!");
-        messageLabel.setStyle("-fx-text-fill: #4ade80;");
+        showStatus("Reset link sent to: " + emailField.getText(), SUCCESS_COLOR);
     }
 
-    private void showError(String message) {
+    private void showStatus(String message, String color) {
         messageLabel.setText(message);
-        messageLabel.setStyle("-fx-text-fill: " + ERROR_COLOR + ";");
+        messageLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
     }
 
+    /**
+     * Standardized scene switcher with CSS injection.
+     */
     private void changeScene(String fxml, String title, ActionEvent event) {
         try {
             URL loc = getClass().getResource(fxml);
             if (loc == null) {
-                LOGGER.log(Level.SEVERE, "Resource not found: " + fxml);
+                LOGGER.log(Level.SEVERE, "FXML Path not found: " + fxml);
+                showStatus("UI Error: Missing view file.", ERROR_COLOR);
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(loc);
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
             Scene scene = new Scene(root);
 
+            // Re-apply global CSS
             URL css = getClass().getResource("/com/amazi/view/style.css");
-            if (css != null) scene.getStylesheets().add(css.toExternalForm());
+            if (css != null) {
+                scene.getStylesheets().add(css.toExternalForm());
+            }
 
             stage.setScene(scene);
-            stage.setTitle("Work Portfolio | " + title);
+            stage.setTitle("AMAZI | " + title);
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Navigation failed", e);
-            showError("Error loading page.");
+            LOGGER.log(Level.SEVERE, "Scene change failed", e);
+            showStatus("Critical Error: Navigation failed.", ERROR_COLOR);
         }
     }
 }

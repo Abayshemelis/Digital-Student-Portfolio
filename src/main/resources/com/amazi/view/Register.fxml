@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import java.net.URL?>
 
-<StackPane prefWidth="650.0" prefHeight="700.0" styleClass="main-bg"
+<StackPane prefWidth="1300.0" prefHeight="700.0" styleClass="main-bg"
            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.amazi.controller.RegisterController">
 
@@ -27,7 +27,7 @@
 
         <VBox alignment="CENTER" spacing="5.0">
             <Label text="CREATE ACCOUNT" styleClass="brand-logo" style="-fx-font-size: 28px;"/>
-            <Label text="Join the AMAZI Portfolio System" styleClass="brand-subtitle"/>
+            <Label text="Digital Student Portfolio System" styleClass="brand-subtitle"/>
         </VBox>
 
         <VBox spacing="12.0">

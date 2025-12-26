@@ -23,7 +23,7 @@ public class DataManager {
     static {
         loadUsersFromFile();
 
-        // Ensure default users exist with 6 arguments (ID, Name, Username, Email, Password, Role)
+        // Ensure default users exist if file is empty
         if (users.isEmpty()) {
             users.add(new User(nextId++, "Admin", "admin", "admin@amazi.com", "admin123", "Admin"));
             users.add(new User(nextId++, "Faculty User", "faculty", "faculty@amazi.com", "faculty123", "Faculty"));
@@ -35,23 +35,23 @@ public class DataManager {
 
     // --- USER MANAGEMENT ---
 
-    /**
-     * UPDATED: Accepts 5 parameters from RegisterController
-     * and passes 6 parameters to the User constructor.
-     */
     public static void addUser(String name, String username, String email, String password, String role) {
         String standardizedRole = role.equalsIgnoreCase("Instructor") ? "Faculty" : role;
-
         users.add(new User(nextId++, name.trim(), username.trim(), email.trim(), password, standardizedRole));
         saveUsersToFile();
     }
 
     /**
-     * UPDATED: Validates against either Username OR Email.
+     * NEW: Required for Admin Management to remove users permanently.
      */
+    public static void deleteUser(User user) {
+        if (user == null) return;
+        users.removeIf(u -> u.getUserID() == user.getUserID());
+        saveUsersToFile();
+    }
+
     public static User validateUser(String identifier, String password) {
         if (identifier == null || password == null) return null;
-
         String cleanId = identifier.trim();
         return users.stream()
                 .filter(u -> (u.getUsername().equalsIgnoreCase(cleanId) || u.getEmail().equalsIgnoreCase(cleanId))
@@ -60,9 +60,6 @@ public class DataManager {
                 .orElse(null);
     }
 
-    /**
-     * FIXED: This method was missing, causing the "symbol not found" error.
-     */
     public static List<User> getAllUsers() {
         return new ArrayList<>(users);
     }
@@ -70,7 +67,6 @@ public class DataManager {
     private static void saveUsersToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(USERS_FILE))) {
             for (User u : users) {
-                // FIXED: Now saves 6 fields including Username
                 writer.println(u.getUserID() + "|" + u.getName() + "|" + u.getUsername() + "|" +
                         u.getEmail() + "|" + u.getPassword() + "|" + u.getRole());
             }
@@ -83,11 +79,11 @@ public class DataManager {
         File file = new File(USERS_FILE);
         if (!file.exists()) return;
 
+        users.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split("\\|");
-                // FIXED: Now expects 6 fields
                 if (p.length >= 6) {
                     int id = Integer.parseInt(p[0]);
                     users.add(new User(id, p[1], p[2], p[3], p[4], p[5]));
@@ -99,9 +95,14 @@ public class DataManager {
         }
     }
 
-    // --- SUBMISSION MANAGEMENT (Keep existing logic) ---
+    // --- SUBMISSION MANAGEMENT ---
 
+    /**
+     * UPDATED: Forces a reload from file so the Admin/Student
+     * sees live updates when the lecturer grades a project.
+     */
     public static ObservableList<Submission> getAllSubmissions() {
+        loadSubmissionsFromFile();
         return allSubmissions;
     }
 
@@ -111,8 +112,10 @@ public class DataManager {
     }
 
     public static void updateSubmissionInFile(Submission submission) {
+        loadSubmissionsFromFile(); // Sync with file before updating
         for (int i = 0; i < allSubmissions.size(); i++) {
             Submission current = allSubmissions.get(i);
+            // Use ID or Title+StudentName to match
             if (current.getTitle().equals(submission.getTitle()) &&
                     current.getStudentName().equals(submission.getStudentName())) {
                 allSubmissions.set(i, submission);

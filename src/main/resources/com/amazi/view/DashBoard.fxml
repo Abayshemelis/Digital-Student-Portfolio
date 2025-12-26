@@ -17,7 +17,7 @@
             <Insets top="30" right="20" bottom="30" left="20"/>
         </padding>
 
-        <Label text="AMAZI" styleClass="sidebar-logo-academic"/>
+        <Label text="Student" styleClass="sidebar-logo-academic"/>
 
         <VBox spacing="10" VBox.vgrow="ALWAYS">
             <Button text="Dashboard Insights" onAction="#handleDashboardHome" maxWidth="Infinity" styleClass="nav-button-active"/>

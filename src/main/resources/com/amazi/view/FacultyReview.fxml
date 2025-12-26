@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import java.net.URL?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1300.0" styleClass="main-container"
+<AnchorPane prefHeight="700.0" prefWidth="1300.0" styleClass="main-container"
             xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/17"
             fx:controller="com.amazi.controller.FacultyReviewController">
@@ -17,7 +17,7 @@
 
         <VBox prefWidth="280.0" styleClass="sidebar">
             <padding><Insets left="30.0" right="30.0" top="50.0" /></padding>
-            <Label styleClass="sidebar-logo" text="AMAZI" />
+            <Label styleClass="sidebar-logo" text="Instructor" />
             <Label styleClass="sidebar-subtitle" text="Instructor Suite">
                 <VBox.margin><Insets bottom="50.0" /></VBox.margin>
             </Label>
@@ -60,7 +60,8 @@
                     </TableView>
                 </VBox>
 
-                <VBox fx:id="detailsPane" prefWidth="450.0" spacing="20.0" styleClass="evaluation-toolkit-card">
+                <VBox fx:id="detailsPane" prefWidth="450.0" spacing="20.0"
+                      styleClass="evaluation-toolkit-card" visible="false" managed="false">
                     <padding><Insets bottom="35.0" left="35.0" right="35.0" top="35.0" /></padding>
 
                     <Label text="EVALUATION TOOLKIT" styleClass="toolkit-header-small" />
@@ -72,17 +73,21 @@
 
                     <VBox spacing="12.0" VBox.vgrow="ALWAYS">
                         <Label text="Reviewer Feedback" styleClass="input-label-bold" />
-                        <TextArea fx:id="feedbackArea" prefHeight="240.0" promptText="Enter feedback for student..." styleClass="toolkit-text-area" wrapText="true" />
+                        <TextArea fx:id="feedbackArea" prefHeight="240.0" promptText="Enter feedback for student..."
+                                  styleClass="toolkit-text-area" wrapText="true" />
 
                         <Label text="Final Grade" styleClass="input-label-bold" />
                         <TextField fx:id="gradeField" promptText="e.g. A+" styleClass="toolkit-text-field" />
                     </VBox>
 
                     <VBox spacing="12.0">
-                        <Button maxWidth="Infinity" onAction="#handleApprove" styleClass="btn-approve-large" text="Approve Submission" />
+                        <Button maxWidth="Infinity" onAction="#handleApprove"
+                                styleClass="btn-approve-large" text="Approve Submission" />
                         <HBox spacing="12.0">
-                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleRevision" styleClass="btn-needs-revision" text="Needs Revision" />
-                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleReject" styleClass="btn-reject-red" text="Reject" />
+                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleRevision"
+                                    styleClass="btn-needs-revision" text="Needs Revision" />
+                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleReject"
+                                    styleClass="btn-reject-red" text="Reject" />
                         </HBox>
                     </VBox>
                 </VBox>
