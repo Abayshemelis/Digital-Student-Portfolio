@@ -5,7 +5,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import java.net.URL?>
 
-<StackPane prefWidth="650.0" prefHeight="700.0" styleClass="main-bg"
+<StackPane prefWidth="800.0" prefHeight="800.0" styleClass="main-bg"
            xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="com.amazi.controller.LoginController">
 
@@ -13,59 +13,47 @@
         <URL value="@/css/style.css" />
     </stylesheets>
 
-    <Circle radius="250.0" styleClass="orb-blue" StackPane.alignment="TOP_LEFT">
+    <Circle radius="300.0" styleClass="orb-blue" StackPane.alignment="TOP_LEFT">
         <StackPane.margin><Insets top="-100.0" left="-100.0"/></StackPane.margin>
     </Circle>
-    <Circle radius="180.0" styleClass="orb-green" StackPane.alignment="BOTTOM_RIGHT">
+    <Circle radius="280.0" styleClass="orb-green" StackPane.alignment="BOTTOM_RIGHT">
         <StackPane.margin><Insets bottom="-80.0" right="-80.0"/></StackPane.margin>
     </Circle>
 
-    <VBox spacing="25.0" alignment="CENTER" maxWidth="450.0" maxHeight="650.0" styleClass="glass-card">
+    <VBox alignment="TOP_CENTER" maxWidth="650.0" maxHeight="600.0" spacing="20.0" styleClass="glass-card">
         <padding>
-            <Insets top="0.0" right="40.0" bottom="30.0" left="40.0"/>
+            <Insets top="25.0" right="40.0" bottom="25.0" left="40.0"/>
         </padding>
 
-        <HBox spacing="0" alignment="CENTER" prefHeight="55.0">
-            <Button fx:id="adminTab" text="Admin" onAction="#handleTabSwitch"
-                    styleClass="tab-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-            <Button fx:id="staffTab" text="Staff" onAction="#handleTabSwitch"
-                    styleClass="tab-button" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-            <Button fx:id="studentTab" text="Student" onAction="#handleTabSwitch"
-                    styleClass="tab-button-active" maxWidth="Infinity" HBox.hgrow="ALWAYS"/>
-        </HBox>
+        <Circle radius="45.0" styleClass="profile-icon-placeholder" fill="#e2e8f0" stroke="#cbd5e1"/>
 
         <VBox alignment="CENTER" spacing="5.0">
-            <Label text="AMAZI" styleClass="brand-logo"/>
-            <Label text="Digital Student Portfolio" styleClass="brand-subtitle"/>
+            <Label text="Welcome Back" style="-fx-font-size: 32px; -fx-font-weight: bold; -fx-text-fill: #1e293b;"/>
+            <Label text="Please sign in to continue" styleClass="brand-subtitle"/>
         </VBox>
+
+        <HBox alignment="CENTER" styleClass="role-pill-container" maxWidth="340.0" minHeight="45.0">
+            <Button fx:id="adminTab" text="Admin" onAction="#handleTabSwitch" styleClass="pill-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button fx:id="staffTab" text="Staff" onAction="#handleTabSwitch" styleClass="pill-button" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+            <Button fx:id="studentTab" text="Student" onAction="#handleTabSwitch" styleClass="pill-button-active" HBox.hgrow="ALWAYS" maxWidth="Infinity"/>
+        </HBox>
 
         <VBox spacing="20.0">
             <VBox spacing="8.0">
-                <Label text="User Name" styleClass="input-label"/>
-                <TextField fx:id="emailField" promptText="Enter your user name" styleClass="modern-input"/>
+                <Label text="User Name" styleClass="sub-label"/>
+                <TextField fx:id="emailField" promptText="Enter your user name" styleClass="modern-input" prefHeight="50.0"/>
             </VBox>
-
             <VBox spacing="8.0">
-                <Label text="Password" styleClass="input-label"/>
-                <PasswordField fx:id="passwordField" promptText="Enter your password" styleClass="modern-input"/>
-                <HBox alignment="CENTER_RIGHT">
-                    <Hyperlink text="Forgot Password?" onAction="#handleForgotPassword" styleClass="forgot-link"/>
-                </HBox>
+                <Label text="Password" styleClass="sub-label"/>
+                <PasswordField fx:id="passwordField" promptText="Enter password" styleClass="modern-input" prefHeight="50.0"/>
             </VBox>
-
-            <ComboBox fx:id="roleSelector" visible="false" managed="false" />
+            <ComboBox fx:id="roleSelector" visible="false" prefHeight="0.0" />
         </VBox>
 
-        <VBox spacing="10.0" alignment="CENTER">
-            <Button text="SIGN IN" onAction="#handleLogin" prefWidth="Infinity" styleClass="gradient-button"/>
-            <Label fx:id="messageLabel" styleClass="error-text" wrapText="true" alignment="CENTER" minHeight="30.0"/>
+        <VBox spacing="20.0" alignment="CENTER" VBox.vgrow="ALWAYS" style="-fx-alignment: BOTTOM_CENTER;">
+            <Button text="Sign In" onAction="#handleLogin" prefWidth="Infinity" styleClass="gradient-button" prefHeight="55.0"/>
+            <Hyperlink text="Create a new student account" onAction="#handleCreateAccount" styleClass="forgot-link" style="-fx-font-weight: bold;"/>
+            <Label fx:id="messageLabel" styleClass="error-text" wrapText="true"/>
         </VBox>
-
-        <Separator opacity="0.2" maxWidth="200"/>
-
-        <HBox spacing="10.0" alignment="CENTER">
-            <Label text="New here?" styleClass="brand-subtitle" style="-fx-font-size: 14px;"/>
-            <Button text="Create account" onAction="#handleCreateAccount" styleClass="create-account-btn"/>
-        </HBox>
     </VBox>
 </StackPane>

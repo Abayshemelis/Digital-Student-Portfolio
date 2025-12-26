@@ -4,6 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.shape.Circle?>
 <?import java.net.URL?>
+<?import javafx.geometry.Insets?>
 
 <HBox fx:controller="com.amazi.controller.StudentDashboardController"
       styleClass="main-container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
@@ -11,75 +12,83 @@
         <URL value="@/css/style.css" />
     </stylesheets>
 
-    <VBox prefWidth="260" spacing="20" styleClass="sidebar">
-        <Label text="AMAZI" styleClass="sidebar-logo"/>
+    <VBox prefWidth="280" spacing="25" styleClass="sidebar-academic">
+        <padding>
+            <Insets top="30" right="20" bottom="30" left="20"/>
+        </padding>
+
+        <Label text="AMAZI" styleClass="sidebar-logo-academic"/>
 
         <VBox spacing="10" VBox.vgrow="ALWAYS">
-            <Button text="Insights" onAction="#handleDashboardHome" maxWidth="Infinity" styleClass="nav-button-active"/>
-            <Button text="Portfolios" onAction="#handleCreatePortfolio" maxWidth="Infinity" styleClass="nav-button"/>
-            <Button text="Settings" onAction="#handleSettings" maxWidth="Infinity" styleClass="nav-button"/>
+            <Button text="Dashboard Insights" onAction="#handleDashboardHome" maxWidth="Infinity" styleClass="nav-button-active"/>
+            <Button text="Academic Portfolios" onAction="#handleCreatePortfolio" maxWidth="Infinity" styleClass="nav-button"/>
+            <Button text="System Settings" onAction="#handleSettings" maxWidth="Infinity" styleClass="nav-button"/>
         </VBox>
 
-        <StackPane alignment="TOP_RIGHT">
-            <Button text="My Portfolios" onAction="#handleSubmitPortfolio"
-                    maxWidth="Infinity" styleClass="btn-primary-green"/>
-            <Label fx:id="notificationBadge" text="0" visible="false"
-                   style="-fx-background-color: #ef4444; -fx-text-fill: white;
-                          -fx-background-radius: 10; -fx-padding: 2 6;
-                          -fx-font-size: 10px; -fx-font-weight: bold;"
-                   translateY="-5" translateX="5"/>
-        </StackPane>
+        <VBox spacing="10" styleClass="academic-status-box">
+            <Label text="ENROLLMENT STATUS" styleClass="status-label-small"/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Circle radius="4" fill="#10b981"/>
+                <Label text="Active Student" styleClass="status-text-smooth"/>
+            </HBox>
+        </VBox>
 
-        <Button text="Sign Out" onAction="#handleLogout" maxWidth="Infinity" styleClass="btn-outline-logout"/>
+        <Button text="Sign Out" onAction="#handleLogout" maxWidth="Infinity" styleClass="btn-outline-logout-academic"/>
     </VBox>
 
     <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS" styleClass="content-scroll-pane">
-        <VBox spacing="30" styleClass="content-padding">
+        <VBox spacing="35" styleClass="content-padding">
 
             <HBox alignment="CENTER_LEFT">
-                <VBox>
-                    <Label text="Dashboard" styleClass="header-title"/>
-                    <Label fx:id="welcomeLabel" text="Welcome back, Abay" styleClass="header-subtitle"/>
+                <VBox spacing="5">
+                    <Label text="Student Overview" styleClass="header-title-academic"/>
+                    <Label fx:id="welcomeLabel" text="Welcome back, Abay Shimelis" styleClass="header-subtitle-academic"/>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />
 
-                <HBox spacing="15" alignment="CENTER">
-                    <Button text="Refresh" onAction="#handleRefresh" styleClass="btn-refresh"
-                            style="-fx-background-color: #f1f5f9; -fx-text-fill: #475569; -fx-cursor: hand;"/>
-
+                <HBox spacing="20" alignment="CENTER">
                     <VBox alignment="CENTER_RIGHT">
-                        <Label text="Abay Shimelis" styleClass="user-name"/>
-                        <Label text="Student ID: 1003/16" styleClass="user-id"/>
+                        <Label text="Abay Shimelis" styleClass="user-name-academic"/>
+                        <Label text="ID: 1003/16 • Computer Science" styleClass="user-discipline-academic"/>
                     </VBox>
 
                     <StackPane onMouseClicked="#handleImageUpload" style="-fx-cursor: hand;">
-                        <ImageView fx:id="userProfileImage" fitHeight="44.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fx:id="userProfileImage" fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                             <Image url="@Images/img.png" />
-                            <clip><Circle centerX="22.0" centerY="22.0" radius="22.0" /></clip>
+                            <clip><Circle centerX="24.0" centerY="24.0" radius="24.0" /></clip>
                         </ImageView>
+                        <Circle radius="24.0" fill="transparent" stroke="#bae6fd" strokeWidth="1.5"/>
                     </StackPane>
                 </HBox>
             </HBox>
 
             <VBox fx:id="mainContentArea" spacing="30">
-                <HBox spacing="20">
-                    <VBox HBox.hgrow="ALWAYS" spacing="15" styleClass="stat-card">
-                        <Label text="Total Credits" styleClass="card-label"/>
-                        <Label text="124" styleClass="card-value"/>
+                <HBox spacing="25">
+                    <VBox HBox.hgrow="ALWAYS" spacing="12" styleClass="stat-card-academic">
+                        <Label text="COMPLETED CREDITS" styleClass="academic-card-label"/>
+                        <Label text="124" styleClass="academic-card-value"/>
+                        <ProgressBar progress="0.75" maxWidth="Infinity" styleClass="academic-progress"/>
                     </VBox>
 
-                    <VBox HBox.hgrow="ALWAYS" spacing="15" styleClass="stat-card">
-                        <Label text="Latest Portfolio Grade" styleClass="card-label"/>
-                        <Label fx:id="portfolioScoreLabel" text="--" styleClass="card-value-green"/>
+                    <VBox HBox.hgrow="ALWAYS" spacing="12" styleClass="stat-card-academic">
+                        <Label text="CURRENT GPA / GRADE" styleClass="academic-card-label"/>
+                        <HBox alignment="BASELINE_LEFT" spacing="5">
+                            <Label fx:id="portfolioScoreLabel" text="3.8" styleClass="academic-card-value-blue"/>
+                            <Label text="/ 4.0" styleClass="academic-card-subtext"/>
+                        </HBox>
                     </VBox>
                 </HBox>
 
-                <VBox spacing="15">
-                    <Label text="Recent Activity &amp; Results" styleClass="section-title"
-                           style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+                <VBox spacing="20" styleClass="activity-section-container">
+                    <HBox alignment="CENTER_LEFT" spacing="15">
+                        <Label text="Recent Academic Records" styleClass="section-title-academic"/>
+                        <Button text="Clear History" onAction="#handleClearHistory" styleClass="btn-clear-history"/>
+                        <Region HBox.hgrow="ALWAYS"/>
+                        <Button text="View Full Transcript" styleClass="btn-link-academic"/>
+                    </HBox>
 
-                    <VBox fx:id="activityListContainer" spacing="12" styleClass="activity-container">
-                        <Label text="Loading your latest results..." style="-fx-text-fill: #94a3b8; -fx-font-style: italic;"/>
+                    <VBox fx:id="activityListContainer" spacing="0" styleClass="activity-list-academic">
+                        <Label text="Accessing academic database..." styleClass="loading-text"/>
                     </VBox>
                 </VBox>
             </VBox>

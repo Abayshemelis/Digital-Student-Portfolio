@@ -1,4 +1,4 @@
-/* login page style part (4-120)*/
+/* login page style part (4-177)*/
 /* --- 1. THE BRIGHT VIBRANT STAGE --- */
 .main-bg {
     /* Base color is a clean Mint White to stay bright and attractive */
@@ -118,46 +118,64 @@
 .create-account-btn:hover {
     -fx-background-color: rgba(59, 130, 246, 0.1);
 }
-/* --- ROLE TABS --- */
-.tab-button, .tab-button-active {
+/* --- 6. PILL ROLE SELECTOR (CENTERED STYLE) --- */
+.role-pill-container {
+    -fx-background-color: #f1f5f9; /* Light grey-blue background */
+    -fx-background-radius: 30;
+    -fx-padding: 4; /* Space between edge and buttons */
+    -fx-border-color: rgba(0, 0, 0, 0.05);
+    -fx-border-radius: 30;
+}
+
+.pill-button {
     -fx-background-color: transparent;
-    -fx-padding: 15 0;
+    -fx-text-fill: #64748b; /* Slate Gray */
+    -fx-background-radius: 25;
+    -fx-font-weight: bold;
     -fx-font-size: 13px;
-    -fx-text-fill: #64748b;
+    -fx-padding: 8 20;
     -fx-cursor: hand;
-    -fx-border-color: transparent transparent rgba(0,0,0,0.1) transparent;
-    -fx-border-width: 0 0 2 0;
+    -fx-transition: all 0.3s ease;
 }
 
-.tab-button-active {
-    -fx-text-fill: #0d9488;
-    -fx-font-weight: bold;
-    -fx-border-color: transparent transparent #10b981 transparent;
+.pill-button:hover {
+    -fx-text-fill: #0ea5e9;
 }
 
-/* --- STATIC INPUTS --- */
-.modern-input {
-    -fx-background-color: #f8fafc;
-    -fx-background-radius: 10;
-    -fx-border-color: #cbd5e1;
-    -fx-border-radius: 10;
-    -fx-padding: 12;
-    -fx-font-size: 14px;
-}
-
-.modern-input:focused {
+/* The active/selected state for the pill */
+.pill-button-active {
     -fx-background-color: white;
-    -fx-border-color: #10b981;
+    -fx-text-fill: #0d9488; /* Emerald Teal */
+    -fx-background-radius: 25;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-padding: 8 20;
+    /* Soft shadow to make it look like it's floating on the pill track */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 5, 0, 0, 2);
 }
 
-/* --- BUTTONS --- */
-.gradient-button {
-    -fx-background-color: linear-gradient(to right, #10b981, #0ea5e9);
-    -fx-text-fill: white;
-    -fx-background-radius: 12;
-    -fx-font-weight: bold;
-    -fx-padding: 15;
+/* --- 7. PROFILE ICON & MISC --- */
+.profile-icon-placeholder {
+    -fx-fill: linear-gradient(to bottom right, #f8fafc, #e2e8f0);
+    -fx-stroke: #cbd5e1;
+    -fx-stroke-width: 1;
 }
+
+/* Custom style for the Username/Password labels to make them elegant */
+.sub-label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1px;
+}
+
+/* Smooth fade for the error label */
+.error-text {
+    -fx-text-fill: #ef4444;
+    -fx-font-size: 12px;
+    -fx-padding: 5 0 0 0;
+}
+
 
 /*AdminDashBoardStyle part (122-203)*/
 /* Matches styleClass="main-container" */
@@ -412,202 +430,176 @@
 /*DashBoard style part*(98-267)*/
 /* --- Base Layout --- */
 /* Main Layout Container */
+/* --- 1. GLOBAL SMOOTHING --- */
 .main-container {
-    -fx-background-color: #f8f9fa;
+    -fx-background-color: #f8fafc; /* Very light, clean slate background */
 }
 
-/* Sidebar Styling */
-.sidebar {
-    -fx-background-color: #1e293b;
+/* --- 2. SOFT SKY SIDEBAR (Airy & Modern) --- */
+.sidebar-academic {
+    /* Soft pastel gradient to replace the bold dark blue */
+    -fx-background-color: linear-gradient(to bottom, #f0f9ff, #e0f2fe);
     -fx-padding: 30 20;
+    -fx-border-color: #bae6fd;
+    -fx-border-width: 0 1 0 0;
 }
 
-.sidebar-logo {
-    -fx-text-fill: white;
+.sidebar-logo-academic {
+    -fx-text-fill: #0ea5e9; /* Sky Blue logo */
     -fx-font-size: 24;
     -fx-font-weight: bold;
-    -fx-padding: 0 0 10 0;
+    -fx-letter-spacing: 3;
 }
 
-/* Navigation Buttons */
+/* Enrollment Status Box (Glassy Look) */
+.academic-status-box {
+    -fx-background-color: rgba(255, 255, 255, 0.6);
+    -fx-padding: 12;
+    -fx-background-radius: 12;
+    -fx-border-color: #bae6fd;
+    -fx-border-width: 0.5;
+}
+
+/* --- 3. NAVIGATION BUTTONS (Refined) --- */
 .nav-button {
     -fx-background-color: transparent;
-    -fx-text-fill: #94a3b8;
+    -fx-text-fill: #64748b; /* Soft Slate Gray instead of bold black */
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 12 15;
-    -fx-font-size: 14;
+    -fx-padding: 10 15;
+    -fx-font-size: 13.5;
+    -fx-background-radius: 10;
     -fx-cursor: hand;
 }
 
 .nav-button:hover {
-    -fx-background-color: #334155;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
+    -fx-background-color: rgba(255, 255, 255, 0.8);
+    -fx-text-fill: #0ea5e9;
 }
 
 .nav-button-active {
-    -fx-background-color: #6366f1;
-    -fx-text-fill: white;
-    -fx-alignment: CENTER_LEFT;
-    -fx-padding: 12 15;
-    -fx-font-size: 14;
-    -fx-background-radius: 8;
+    -fx-background-color: #ffffff;
+    -fx-text-fill: #0ea5e9;
     -fx-font-weight: bold;
+    -fx-background-radius: 10;
+    -fx-effect: dropshadow(three-pass-box, rgba(14, 165, 233, 0.1), 10, 0, 0, 2);
 }
 
-/* Primary Green Button (My Portfolios) */
-.btn-primary-green {
-    -fx-background-color: #10b981;
-    -fx-text-fill: white;
-    -fx-font-weight: bold;
-    -fx-background-radius: 8;
-    -fx-padding: 12;
-    -fx-cursor: hand;
-}
-
-.btn-primary-green:hover {
-    -fx-background-color: #059669;
-}
-
-/* Outline Logout Button */
-.btn-outline-logout {
+/* Sign Out Button */
+.btn-outline-logout-academic {
     -fx-background-color: transparent;
     -fx-text-fill: #94a3b8;
-    -fx-border-color: #334155;
-    -fx-border-radius: 8;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 10;
+    -fx-padding: 8 12;
     -fx-cursor: hand;
 }
 
-.btn-outline-logout:hover {
-    -fx-border-color: #f43f5e;
-    -fx-text-fill: #f43f5e;
+.btn-outline-logout-academic:hover {
+    -fx-background-color: #fef2f2;
+    -fx-text-fill: #ef4444;
+    -fx-border-color: #fee2e2;
 }
 
-/* Content Area */
+/* --- 4. HEADER & PROFILE AREA --- */
 .content-scroll-pane {
     -fx-background-color: transparent;
-    -fx-background: #f8f9fa;
+    -fx-background: #f8fafc;
 }
 
 .content-padding {
     -fx-padding: 40;
 }
 
-/* Header Text */
-.header-title {
-    -fx-font-size: 28;
+.header-title-academic {
+    -fx-font-size: 26;
     -fx-font-weight: bold;
     -fx-text-fill: #1e293b;
 }
 
-.header-subtitle {
-    -fx-text-fill: #64748b;
+.header-subtitle-academic {
+    -fx-text-fill: #94a3b8;
     -fx-font-size: 14;
 }
 
-.user-name {
+.user-name-academic {
     -fx-font-weight: bold;
     -fx-text-fill: #1e293b;
+    -fx-font-size: 15;
 }
 
-.user-id {
-    -fx-text-fill: #64748b;
-    -fx-font-size: 12;
-}
-
-.user-avatar-circle {
-    -fx-fill: #e2e8f0;
-    -fx-stroke: #cbd5e1;
-}
-
-/* Stat Cards */
-.stat-card {
-    -fx-background-color: white;
-    -fx-padding: 25;
-    -fx-background-radius: 15;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.05), 10, 0, 0, 4);
-}
-
-.card-label {
-    -fx-text-fill: #64748b;
-    -fx-font-weight: bold;
-}
-
-.card-value {
-    -fx-font-size: 32;
-    -fx-font-weight: bold;
-    -fx-text-fill: #1e293b;
-}
-
-.card-value-green {
-    -fx-font-size: 32;
-    -fx-font-weight: bold;
-    -fx-text-fill: #10b981;
-}
-
-.card-subtext {
+.user-discipline-academic {
     -fx-text-fill: #94a3b8;
     -fx-font-size: 12;
 }
 
-/* Progress Bar Indigo Styling */
-.progress-indigo .bar {
-    -fx-background-color: #6366f1;
-    -fx-background-radius: 5;
+/* --- 5. SMOOTH STAT CARDS --- */
+.stat-card-academic {
+    -fx-background-color: #ffffff;
+    -fx-padding: 22;
+    -fx-background-radius: 20;
+    -fx-border-color: #f1f5f9;
+    /* Ultra-light shadow for smoothness */
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.03), 15, 0, 0, 4);
 }
 
-.progress-indigo .track {
-    -fx-background-color: #e2e8f0;
-    -fx-background-radius: 5;
+.academic-card-label {
+    -fx-text-fill: #94a3b8;
+    -fx-font-weight: bold;
+    -fx-font-size: 10.5;
+    -fx-letter-spacing: 0.5;
 }
 
-/* Activity Section */
-.section-title {
+.academic-card-value {
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+    -fx-text-fill: #334155;
+}
+
+.academic-card-value-blue {
+    -fx-font-size: 32;
+    -fx-font-weight: bold;
+    -fx-text-fill: #0ea5e9;
+}
+
+/* Smooth Progress Bar */
+.academic-progress .bar {
+    -fx-background-color: #0ea5e9;
+    -fx-background-radius: 20;
+}
+.academic-progress .track {
+    -fx-background-color: #f0f9ff;
+    -fx-background-radius: 20;
+}
+
+/* --- 6. ACTIVITY SECTION --- */
+.activity-section-container {
+    -fx-background-color: transparent;
+}
+
+.section-title-academic {
     -fx-font-size: 20;
     -fx-font-weight: bold;
     -fx-text-fill: #1e293b;
 }
 
-.activity-container {
-    -fx-background-color: white;
-    -fx-padding: 10;
-    -fx-background-radius: 15;
-    -fx-border-color: #e2e8f0;
-    -fx-border-radius: 15;
-}
-
-.activity-row-bordered {
-    -fx-padding: 15;
+.activity-list-academic {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20;
     -fx-border-color: #f1f5f9;
-    -fx-border-width: 0 0 1 0;
-}
-
-.activity-row {
     -fx-padding: 15;
 }
 
-.activity-text {
-    -fx-font-size: 15;
-    -fx-text-fill: #334155;
+.btn-link-academic {
+    -fx-background-color: transparent;
+    -fx-text-fill: #0ea5e9;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
 }
 
-/* Status Pills */
-.pill-green {
-    -fx-background-color: #dcfce7;
-    -fx-text-fill: #15803d;
-    -fx-padding: 5 12;
-    -fx-background-radius: 20;
-    -fx-font-size: 12;
-    -fx-font-weight: bold;
-}
-
-.pill-amber {
-    -fx-background-color: #fef3c7;
-    -fx-text-fill: #b45309;
-    -fx-padding: 5 12;
-    -fx-background-radius: 20;
-    -fx-font-size: 12;
-    -fx-font-weight: bold;
+.loading-text {
+    -fx-text-fill: #cbd5e1;
+    -fx-font-style: italic;
+    -fx-padding: 20;
 }
 
 
@@ -711,6 +703,76 @@
 
 .save-btn:hover {
     -fx-background-color: #4a69bd;
+}
+/* --- 7. DYNAMIC RECENT ACTIVITY ROWS --- */
+
+/* The Container for each record */
+.activity-row {
+    -fx-background-color: white;
+    -fx-background-radius: 12;
+    -fx-border-color: #f1f5f9;
+    -fx-border-width: 0 0 1 0; /* Thin divider line between records */
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.activity-row:hover {
+    -fx-background-color: #f8fafc; /* Subtle sky tint on hover */
+}
+
+/* Faculty Feedback Text Styling */
+.faculty-comment-text {
+    -fx-text-fill: #64748b; /* Slate gray for readability */
+    -fx-font-size: 12px;
+    -fx-font-style: italic;
+    /* Ensures long comments don't break the layout */
+    -fx-wrap-text: true;
+}
+
+/* The small "RESULT" header above the grade */
+.result-header-text {
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 9px;
+    -fx-font-weight: bold;
+    -fx-letter-spacing: 1;
+}
+
+/* The Grade/Result Badge */
+.badge-passed {
+    -fx-background-color: #f0fdf4; /* Soft green background */
+    -fx-text-fill: #16a34a;        /* Dark green text */
+    -fx-padding: 5 12;
+    -fx-background-radius: 8;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-border-color: #dcfce7;
+    -fx-border-width: 1;
+}
+
+/* --- 8. CLEAR HISTORY & EMPTY STATES --- */
+
+/* Style for the Clear History button in the dashboard */
+.btn-clear-history {
+    -fx-background-color: transparent;
+    -fx-text-fill: #94a3b8;
+    -fx-font-size: 11px;
+    -fx-border-color: #e2e8f0;
+    -fx-border-radius: 15;
+    -fx-padding: 4 10;
+    -fx-cursor: hand;
+}
+
+.btn-clear-history:hover {
+    -fx-background-color: #fff1f2; /* Light red tint */
+    -fx-text-fill: #e11d48;        /* Danger red */
+    -fx-border-color: #fecdd3;
+}
+
+/* Placeholder text when history is empty */
+.loading-text {
+    -fx-text-fill: #94a3b8;
+    -fx-font-style: italic;
+    -fx-font-size: 13px;
+    -fx-padding: 30;
 }
 
 /* This MyPortfolio style part (404_459*/

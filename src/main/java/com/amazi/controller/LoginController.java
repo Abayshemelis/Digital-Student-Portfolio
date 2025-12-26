@@ -126,7 +126,7 @@ public class LoginController {
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
 
             stage.setScene(scene);
-            stage.setTitle("AMAZI | " + title);
+            stage.setTitle("Work Portfolio | " + title);
             stage.centerOnScreen();
             stage.show();
         } catch (Exception e) {
