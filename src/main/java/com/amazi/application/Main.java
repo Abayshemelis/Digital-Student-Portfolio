@@ -11,7 +11,7 @@ import java.net.URL;
 
     @Override
     public void start(Stage stage) throws Exception {
-        // 1. FIXED PATH: Match your actual filename DashBoard.fxml (Capital B)
+        // 1. FIXED  Login FXML PATH:
         URL fxmlLocation = getClass().getResource("/com/amazi/view/Login.fxml");
 
         if (fxmlLocation == null) {
@@ -23,7 +23,7 @@ import java.net.URL;
         Parent root = loader.load();
         Scene scene = new Scene(root );
 
-        // 2. FIXED CSS PATH: Match your /css/style.css folder in the screenshot
+        // 2. FIXED CSS PATH:
         URL cssLocation = getClass().getResource("/css/style.css");
         if (cssLocation != null) {
             scene.getStylesheets().add(cssLocation.toExternalForm());
