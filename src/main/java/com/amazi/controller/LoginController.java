@@ -14,7 +14,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@SuppressWarnings("unused") // Suppresses "field never assigned" warnings from IDE
+
 public class LoginController {
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
     private static final String ERROR_COLOR = "#fb7185";

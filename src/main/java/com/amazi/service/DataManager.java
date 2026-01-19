@@ -18,12 +18,13 @@ public class DataManager {
     private static final ObservableList<Submission> allSubmissions = FXCollections.observableArrayList();
     private static final String SUBMISSION_FILE = "submissions.txt";
     private static final String USERS_FILE = "users.txt";
+    private static final String HISTORY_CONFIG = "history_config.txt";
+
     private static int nextId = 1;
 
     static {
         loadUsersFromFile();
 
-        // Ensure default users exist if file is empty
         if (users.isEmpty()) {
             users.add(new User(nextId++, "Admin", "admin", "admin@amazi.com", "admin123", "Admin"));
             users.add(new User(nextId++, "Faculty User", "faculty", "faculty@amazi.com", "faculty123", "Faculty"));
@@ -33,17 +34,20 @@ public class DataManager {
         loadSubmissionsFromFile();
     }
 
-    // --- USER MANAGEMENT ---
-
-    public static void addUser(String name, String username, String email, String password, String role) {
-        String standardizedRole = role.equalsIgnoreCase("Instructor") ? "Faculty" : role;
-        users.add(new User(nextId++, name.trim(), username.trim(), email.trim(), password, standardizedRole));
-        saveUsersToFile();
+    // --- FIXED: USER MANAGEMENT METHODS FOR ADMIN ---
+    public static List<User> getAllUsers() {
+        return new ArrayList<>(users);
     }
 
     public static void deleteUser(User user) {
         if (user == null) return;
         users.removeIf(u -> u.getUserID() == user.getUserID());
+        saveUsersToFile();
+    }
+
+    public static void addUser(String name, String username, String email, String password, String role) {
+        String standardizedRole = role.equalsIgnoreCase("Instructor") ? "Faculty" : role;
+        users.add(new User(nextId++, name.trim(), username.trim(), email.trim(), password, standardizedRole));
         saveUsersToFile();
     }
 
@@ -57,10 +61,6 @@ public class DataManager {
                 .orElse(null);
     }
 
-    public static List<User> getAllUsers() {
-        return new ArrayList<>(users);
-    }
-
     private static void saveUsersToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(USERS_FILE))) {
             for (User u : users) {
@@ -68,14 +68,13 @@ public class DataManager {
                         u.getEmail() + "|" + u.getPassword() + "|" + u.getRole());
             }
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Could not save users to file", e);
+            LOGGER.log(Level.SEVERE, "Could not save users", e);
         }
     }
 
     private static void loadUsersFromFile() {
         File file = new File(USERS_FILE);
         if (!file.exists()) return;
-
         users.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
@@ -87,29 +86,27 @@ public class DataManager {
                     nextId = Math.max(nextId, id + 1);
                 }
             }
-        } catch (IOException | NumberFormatException e) {
-            LOGGER.log(Level.WARNING, "Error loading users from file", e);
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "Error loading users", e);
         }
     }
 
-    // --- SUBMISSION MANAGEMENT ---
-
     public static ObservableList<Submission> getAllSubmissions() {
-        loadSubmissionsFromFile();
         return allSubmissions;
     }
 
     public static void addSubmission(Submission submission) {
+        submission.setLastUpdated(System.currentTimeMillis());
         allSubmissions.add(submission);
         saveSubmissionsToFile();
     }
 
     public static void updateSubmissionInFile(Submission submission) {
-        loadSubmissionsFromFile();
         for (int i = 0; i < allSubmissions.size(); i++) {
             Submission current = allSubmissions.get(i);
-            if (current.getTitle().equals(submission.getTitle()) &&
-                    current.getStudentName().equals(submission.getStudentName())) {
+            if (current.getTitle().trim().equalsIgnoreCase(submission.getTitle().trim()) &&
+                    current.getStudentName().trim().equalsIgnoreCase(submission.getStudentName().trim())) {
+
                 allSubmissions.set(i, submission);
                 break;
             }
@@ -117,9 +114,34 @@ public class DataManager {
         saveSubmissionsToFile();
     }
 
-    /**
-     * FULLY UPDATED: Now loads the Description, Organization Name, and Email from the file.
-     */
+    // --- HISTORY CLEARANCE LOGIC ---
+
+    public static void saveLastClearTime(String studentName) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(HISTORY_CONFIG, true))) {
+            writer.println(studentName.trim() + "|" + System.currentTimeMillis());
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Could not save history config", e);
+        }
+    }
+
+    public static long getLastClearTime(String studentName) {
+        File file = new File(HISTORY_CONFIG);
+        if (!file.exists()) return 0;
+        long lastClear = 0;
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] p = line.split("\\|");
+                if (p.length >= 2 && p[0].equalsIgnoreCase(studentName.trim())) {
+                    lastClear = Long.parseLong(p[1]);
+                }
+            }
+        } catch (Exception e) { return 0; }
+        return lastClear;
+    }
+
+
+    // --- FILE I/O ---
     private static void loadSubmissionsFromFile() {
         File file = new File(SUBMISSION_FILE);
         if (!file.exists()) return;
@@ -129,25 +151,19 @@ public class DataManager {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] p = line.split("\\|");
-                // Check for index safety (p.length >= 9 to accommodate email and org)
                 if (p.length >= 6) {
                     Submission s = new Submission(
-                            p[0], // Title
-                            p[1], // Course
-                            "Project",
-                            "General",
+                            p[0], p[1], "Project", "General",
                             LocalDate.now(),
-                            p.length > 6 ? p[6] : "No description", // Description
-                            "None",
-                            p[3], // Status
-                            p[2]  // StudentName
+                            p.length > 6 ? p[6] : "No description",
+                            "None", p[3], p[2]
                     );
                     s.setFeedback(p[4]);
                     s.setGrade(p[5]);
-
-                    // --- Load the NEW Organization Data ---
                     if (p.length > 7) s.setOrganizationName(p[7]);
                     if (p.length > 8) s.setEmail(p[8]);
+                    if (p.length > 9) s.setCreditHours(p[9]);
+                    if (p.length > 10) s.setLastUpdated(Long.parseLong(p[10]));
 
                     allSubmissions.add(s);
                 }
@@ -157,9 +173,6 @@ public class DataManager {
         }
     }
 
-    /**
-     * FULLY UPDATED: Now saves Description, Organization Name, and Email.
-     */
     private static void saveSubmissionsToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(SUBMISSION_FILE))) {
             for (Submission s : allSubmissions) {
@@ -168,11 +181,13 @@ public class DataManager {
                                 s.getCourse() + "|" +
                                 s.getStudentName() + "|" +
                                 s.getStatus() + "|" +
-                                (s.getFeedback() == null ? "No feedback" : s.getFeedback()) + "|" +
-                                (s.getGrade() == null ? "N/A" : s.getGrade()) + "|" +
-                                s.getDescription() + "|" +         // Column 6
-                                s.getOrganizationName() + "|" +    // Column 7
-                                s.getEmail()                       // Column 8
+                                (s.getFeedback() == null || s.getFeedback().isEmpty() ? "No feedback" : s.getFeedback()) + "|" +
+                                (s.getGrade() == null || s.getGrade().isEmpty() ? "N/A" : s.getGrade()) + "|" +
+                                (s.getDescription() == null ? "" : s.getDescription()) + "|" +
+                                (s.getOrganizationName() == null ? "" : s.getOrganizationName()) + "|" +
+                                (s.getEmail() == null ? "" : s.getEmail()) + "|" +
+                                (s.getCreditHours() == null ? "0" : s.getCreditHours()) + "|" +
+                                s.getLastUpdated()
                 );
             }
         } catch (IOException e) {

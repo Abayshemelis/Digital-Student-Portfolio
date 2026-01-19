@@ -23,13 +23,10 @@
             </Label>
 
             <VBox spacing="15.0" VBox.vgrow="ALWAYS">
-                <Button maxWidth="Infinity" styleClass="sidebar-btn-active" text="Review Queue" alignment="BASELINE_LEFT" />
-                <Button maxWidth="Infinity" styleClass="sidebar-btn" text="Student Records" alignment="BASELINE_LEFT" />
-                <Button maxWidth="Infinity" styleClass="sidebar-btn" text="Analytics" alignment="BASELINE_LEFT" />
-                <Button maxWidth="Infinity" styleClass="sidebar-btn" text="Settings" alignment="BASELINE_LEFT" />
+                <Button maxWidth="Infinity" styleClass="sidebar-btn-active" text="Student Records" alignment="BASELINE_LEFT" />
             </VBox>
 
-            <Button maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-btn" text="Log Out">
+            <Button fx:id="logoutButton" maxWidth="Infinity" onAction="#handleLogout" styleClass="logout-btn" text="Log Out">
                 <VBox.margin><Insets bottom="40.0" /></VBox.margin>
             </Button>
         </VBox>
@@ -39,11 +36,11 @@
 
             <HBox alignment="CENTER_LEFT">
                 <VBox>
-                    <Label styleClass="page-title" text="Submission Review" />
-                    <Label styleClass="page-subtitle" text="Pending Evaluations" />
+                    <Label styleClass="page-title" text="Academic Management" />
+                    <Label styleClass="page-subtitle" text="Student Submission Records" />
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />
-                <TextField fx:id="searchField" prefWidth="320.0" promptText="Search student..." styleClass="search-field" />
+                <TextField fx:id="searchField" prefWidth="320.0" promptText="Search student records..." styleClass="search-field" />
                 <Region prefWidth="20.0" />
                 <Circle fx:id="statusCircle" radius="7.0" fill="#10b981" />
             </HBox>
@@ -60,49 +57,71 @@
                     </TableView>
                 </VBox>
 
-                <VBox fx:id="detailsPane" prefWidth="480.0" spacing="15.0"
-                      styleClass="evaluation-toolkit-card" visible="false" managed="false">
-                    <padding><Insets bottom="25.0" left="30.0" right="30.0" top="25.0" /></padding>
+                <ScrollPane fx:id="scrollWrapper" fitToWidth="true" hbarPolicy="NEVER"
+                            style="-fx-background-color: transparent; -fx-background: transparent; -fx-padding: 0;"
+                            prefWidth="500.0" vbarPolicy="AS_NEEDED" visible="false" managed="false">
 
-                    <Label text="EVALUATION TOOLKIT" styleClass="toolkit-header-small" />
+                    <VBox fx:id="detailsPane" spacing="15.0" styleClass="evaluation-toolkit-card">
+                        <padding><Insets bottom="25.0" left="30.0" right="30.0" top="25.0" /></padding>
 
-                    <VBox spacing="5.0">
-                        <Label fx:id="studentLabel" styleClass="detail-name-large" text="Select a Student" />
-                        <Label fx:id="titleLabel" styleClass="detail-project-sub" text="Project description" wrapText="true" />
+                        <Label text="RECORD DETAILS" styleClass="toolkit-header-small" />
+
+                        <VBox spacing="5.0">
+                            <Label fx:id="studentLabel" styleClass="detail-name-large" text="Select a Student" />
+                            <Label fx:id="titleLabel" styleClass="detail-project-sub" text="Project description" wrapText="true" />
+                        </VBox>
+
+                        <VBox spacing="5.0" style="-fx-background-color: #f8fafc; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #e2e8f0; -fx-border-radius: 8;">
+                            <Label text="EXTERNAL CONTEXT" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748b;" />
+                            <HBox spacing="10">
+                                <Label text="Org:" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                                <Label fx:id="orgLabel" text="N/A" style="-fx-text-fill: #1e293b;" />
+                            </HBox>
+                            <HBox spacing="10">
+                                <Label text="Email:" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
+                                <Label fx:id="emailLabel" text="N/A" style="-fx-text-fill: #2563eb; -fx-underline: true;" />
+                            </HBox>
+                        </VBox>
+
+                        <VBox spacing="8.0">
+                            <Label text="STUDENT SUBMISSION CONTENT" styleClass="input-label-bold" style="-fx-text-fill: #1e293b;" />
+                            <TextArea fx:id="submissionDescriptionArea" editable="false" prefHeight="150.0"
+                                      promptText="Student work content will appear here..."
+                                      styleClass="toolkit-text-area"
+                                      style="-fx-control-inner-background: #f1f5f9; -fx-opacity: 0.9;" wrapText="true" />
+                        </VBox>
+
+                        <Separator />
+
+                        <VBox spacing="10.0" VBox.vgrow="ALWAYS">
+                            <Label text="Reviewer Feedback" styleClass="input-label-bold" />
+                            <TextArea fx:id="feedbackArea" prefHeight="120.0" promptText="Enter feedback for student..."
+                                      styleClass="toolkit-text-area" wrapText="true" />
+
+                            <HBox spacing="15.0">
+                                <VBox HBox.hgrow="ALWAYS" spacing="5.0">
+                                    <Label text="Final Grade" styleClass="input-label-bold" />
+                                    <TextField fx:id="gradeField" promptText="e.g. A+" styleClass="toolkit-text-field" />
+                                </VBox>
+                                <VBox HBox.hgrow="ALWAYS" spacing="5.0">
+                                    <Label text="Credit Hours" styleClass="input-label-bold" />
+                                    <TextField fx:id="creditField" promptText="e.g. 3" styleClass="toolkit-text-field" />
+                                </VBox>
+                            </HBox>
+                        </VBox>
+
+                        <VBox spacing="10.0">
+                            <Button maxWidth="Infinity" onAction="#handleApprove"
+                                    styleClass="btn-approve-large" text="Update &amp; Approve" />
+                            <HBox spacing="10.0">
+                                <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleRevision"
+                                        styleClass="btn-needs-revision" text="Request Revision" />
+                                <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleReject"
+                                        styleClass="btn-reject-red" text="Reject Record" />
+                            </HBox>
+                        </VBox>
                     </VBox>
-
-                    <VBox spacing="5.0" style="-fx-background-color: #f8fafc; -fx-padding: 10; -fx-background-radius: 8; -fx-border-color: #e2e8f0; -fx-border-radius: 8;">
-                        <Label text="EXTERNAL CONTEXT" style="-fx-font-size: 10px; -fx-font-weight: bold; -fx-text-fill: #64748b;" />
-                        <HBox spacing="10">
-                            <Label text="Org:" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
-                            <Label fx:id="orgLabel" text="N/A" style="-fx-text-fill: #1e293b;" />
-                        </HBox>
-                        <HBox spacing="10">
-                            <Label text="Email:" style="-fx-font-weight: bold; -fx-text-fill: #475569;" />
-                            <Label fx:id="emailLabel" text="N/A" style="-fx-text-fill: #2563eb; -fx-underline: true;" />
-                        </HBox>
-                    </VBox>
-
-                    <VBox spacing="10.0" VBox.vgrow="ALWAYS">
-                        <Label text="Reviewer Feedback" styleClass="input-label-bold" />
-                        <TextArea fx:id="feedbackArea" prefHeight="180.0" promptText="Enter feedback for student..."
-                                  styleClass="toolkit-text-area" wrapText="true" />
-
-                        <Label text="Final Grade" styleClass="input-label-bold" />
-                        <TextField fx:id="gradeField" promptText="e.g. A+" styleClass="toolkit-text-field" />
-                    </VBox>
-
-                    <VBox spacing="10.0">
-                        <Button maxWidth="Infinity" onAction="#handleApprove"
-                                styleClass="btn-approve-large" text="Approve Submission" />
-                        <HBox spacing="10.0">
-                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleRevision"
-                                    styleClass="btn-needs-revision" text="Needs Revision" />
-                            <Button HBox.hgrow="ALWAYS" maxWidth="Infinity" onAction="#handleReject"
-                                    styleClass="btn-reject-red" text="Reject" />
-                        </HBox>
-                    </VBox>
-                </VBox>
+                </ScrollPane>
             </HBox>
         </VBox>
     </HBox>

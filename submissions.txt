@@ -1,7 +1,10 @@
-Data management |Computer Science|Abay Shimelis|APPROVED|good|A|No description||
-dggd|General|Abay Shimelis|APPROVED|good|A|No description||
-python|General|Abay Shimelis|APPROVED||A|No description||
-DataBase|General|Abay Shimelis|APPROVED|keep it up |A+|No description||
-Database |Computer Science|Abay Shimelis|APPROVED|Good|A|No description||
-Database project |Database|Abay Shimelis|APPROVED|goodd|A|No description||
-cs|Java|Abay Shimelis|APPROVED|It is good |A|presenting computer science |hawassa universtiy|hu@gmail.com
+Data management |Computer Science|Abay Shimelis|APPROVED|good|A|No description|||0|1768851372513
+dggd|General|Abay Shimelis|REJECTED|good|A|No description|||0|1768851372514
+python|General|Abay Shimelis|APPROVED|No feedback|A|No description|||0|1768851372514
+DataBase|General|Abay Shimelis|APPROVED|keep it up |A+|No description|||0|1768851372514
+Database |Computer Science|Abay Shimelis|APPROVED|Good|A|No description|||0|1768851372514
+Database project |Database|Abay Shimelis|APPROVED|goodd|A|No description|||0|1768851372515
+cs|Java|Abay Shimelis|REJECTED|It is good |A|presenting computer science |hawassa universtiy|hu@gmail.com|0|1768851454076
+programming project|C++|Abay Shimelis|APPROVED|good|A|about programming in detail|Hawassa University|hu@gmail.com|5|1768851372515
+programming project|C++|Abay Shimelis|APPROVED|good|A|about programming in detail|Hawassa University|hu@gmail.com|5|1768851372516
+Databasemanagemnt project|Database|Abay Shimelis|APPROVED|good|A|about describing datamangagemnt system |Hawassa university|hu@gmail.com|5|1768852199699

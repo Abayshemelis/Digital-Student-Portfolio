@@ -22,7 +22,7 @@
         <VBox spacing="10" VBox.vgrow="ALWAYS">
             <Button text="Dashboard Insights" onAction="#handleDashboardHome" maxWidth="Infinity" styleClass="nav-button-active"/>
             <Button text="Academic Portfolios" onAction="#handleCreatePortfolio" maxWidth="Infinity" styleClass="nav-button"/>
-            <Button text="System Settings" onAction="#handleSettings" maxWidth="Infinity" styleClass="nav-button"/>
+            <Button text="System Settings" onAction="#handleSystemSettings" maxWidth="Infinity" styleClass="nav-button"/>
         </VBox>
 
         <VBox spacing="10" styleClass="academic-status-box">
@@ -46,13 +46,13 @@
             <HBox alignment="CENTER_LEFT">
                 <VBox spacing="5">
                     <Label text="Student Overview" styleClass="header-title-academic"/>
-                    <Label fx:id="welcomeLabel" text="Welcome back, Abay Shimelis" styleClass="header-subtitle-academic"/>
+                    <Label fx:id="welcomeLabel" text="Welcome back, Dear Student" styleClass="header-subtitle-academic"/>
                 </VBox>
                 <Region HBox.hgrow="ALWAYS" />
 
                 <HBox spacing="20" alignment="CENTER">
                     <VBox alignment="CENTER_RIGHT">
-                        <Label text="Abay Shimelis" styleClass="user-name-academic"/>
+                        <Label text="Dear Student" styleClass="user-name-academic"/>
                         <Label text="ID: 1003/16 • Computer Science" styleClass="user-discipline-academic"/>
                     </VBox>
 
@@ -67,14 +67,15 @@
             </HBox>
 
             <VBox fx:id="mainContentArea" spacing="30">
+
                 <HBox spacing="25">
-                    <VBox HBox.hgrow="ALWAYS" spacing="12" styleClass="stat-card-academic">
+                    <VBox fx:id="creditHourSection" HBox.hgrow="ALWAYS" spacing="12" styleClass="stat-card-academic">
                         <Label text="COMPLETED CREDITS" styleClass="academic-card-label"/>
                         <Label text="124" styleClass="academic-card-value"/>
                         <ProgressBar progress="0.75" maxWidth="Infinity" styleClass="academic-progress"/>
                     </VBox>
 
-                    <VBox HBox.hgrow="ALWAYS" spacing="12" styleClass="stat-card-academic">
+                    <VBox fx:id="cgpaSection" HBox.hgrow="ALWAYS" spacing="12" styleClass="stat-card-academic">
                         <Label text="CURRENT GPA / GRADE" styleClass="academic-card-label"/>
                         <HBox alignment="BASELINE_LEFT" spacing="5">
                             <Label fx:id="portfolioScoreLabel" text="3.8" styleClass="academic-card-value-blue"/>
@@ -83,7 +84,7 @@
                     </VBox>
                 </HBox>
 
-                <VBox spacing="20" styleClass="activity-section-container">
+                <VBox fx:id="historySection" spacing="20" styleClass="activity-section-container">
                     <HBox alignment="CENTER_LEFT" spacing="15">
                         <Label text="Recent Academic Records" styleClass="section-title-academic"/>
                         <Button text="Clear History" onAction="#handleClearHistory" styleClass="btn-clear-history"/>

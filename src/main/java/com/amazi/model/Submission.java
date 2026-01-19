@@ -3,7 +3,6 @@ package com.amazi.model;
 import java.time.LocalDate;
 import java.util.UUID;
 
-
 @SuppressWarnings("unused")
 public class Submission {
 
@@ -20,10 +19,10 @@ public class Submission {
     private String grade;
     private String feedback;
     private boolean viewedByStudent;
-
-    // --- NEW FIELDS: Added for Organization and Email Support ---
     private String email;
     private String organizationName;
+    private String creditHours;
+    private long lastUpdated;
 
     public Submission(String title, String course, String assignment,
                       String category, LocalDate date, String desc,
@@ -43,33 +42,42 @@ public class Submission {
         this.feedback = "";
         this.viewedByStudent = false;
 
-        // Initialize new fields to avoid NullPointerExceptions
+        // Initialize new fields
         this.email = "";
         this.organizationName = "";
+        this.creditHours = "0";
+
+        // Default timestamp to current time upon creation
+        this.lastUpdated = System.currentTimeMillis();
     }
 
-
-    public String getEmail() {
-        return email;
+    // --- NEW GETTER & SETTER FOR TIMESTAMP ---
+    public long getLastUpdated() {
+        return lastUpdated;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLastUpdated(long lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
-    public String getOrganizationName() {
-        return organizationName;
+    // --- NEW GETTERS & SETTERS FOR CREDITS ---
+    public String getCreditHours() {
+        return creditHours;
     }
 
-    public void setOrganizationName(String organizationName) {
-        this.organizationName = organizationName;
+    public void setCreditHours(String creditHours) {
+        this.creditHours = creditHours;
     }
+
+    // --- EXISTING FIELDS ---
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getOrganizationName() { return organizationName; }
+    public void setOrganizationName(String organizationName) { this.organizationName = organizationName; }
 
     // --- COMPATIBILITY METHOD ---
-
-    public String getFacultyComment() {
-        return this.feedback;
-    }
+    public String getFacultyComment() { return this.feedback; }
 
     // --- EXISTING GETTERS ---
     public String getId() { return id; }
@@ -93,7 +101,13 @@ public class Submission {
     public void setCategory(String category)     { this.category = category; }
     public void setDescription(String desc)      { this.description = desc; }
     public void setFilePath(String path)         { this.filePath = path; }
-    public void setStatus(String status)         { this.status = status; }
+
+
+    public void setStatus(String status) {
+        this.status = status;
+        this.lastUpdated = System.currentTimeMillis();
+    }
+
     public void setGrade(String grade)           { this.grade = grade; }
     public void setFeedback(String feedback)     { this.feedback = feedback; }
     public void setViewedByStudent(boolean v)    { this.viewedByStudent = v; }
