@@ -20,18 +20,25 @@ public class SubmissionService {
             return false;
         }
 
-        // 2. State Change: Lock the status
+        // 2. NEW: Validation for the new fields before finalizing
+        if (submission.getEmail() == null || !submission.getEmail().contains("@")) {
+            System.err.println("Error: Invalid organization email.");
+            return false;
+        }
+
+        // 3. State Change: Lock the status
         submission.setStatus("SUBMITTED");
 
-        // TEMPORARY: Console Logging for verification
+        // UPDATED: Console Logging including new fields
         System.out.println("--- PORTFOLIO SUBMITTED ---");
-        System.out.println("Title:      " + submission.getTitle());
-        System.out.println("Course:     " + submission.getCourse());
-        System.out.println("Assignment: " + submission.getAssignment());
-        System.out.println("Status:     " + submission.getStatus());
+        System.out.println("Title:        " + submission.getTitle());
+        System.out.println("Organization: " + submission.getOrganizationName()); // New
+        System.out.println("Org Email:    " + submission.getEmail());           // New
+        System.out.println("Course:       " + submission.getCourse());
+        System.out.println("Status:       " + submission.getStatus());
         System.out.println("---------------------------");
 
-        return true; // simulate success
+        return true;
     }
 
     /**

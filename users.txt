@@ -4,3 +4,4 @@
 12|Edgat Adisu|edu|Hawassa   University|222222|Student
 13|Nejwa Abrar|nejwa|Hawassa University|333333|Student
 14|Kirubel Getahun|kira|Hawassa University|444444|Student
+15|Jonh doe|john|Hu|111111|Student

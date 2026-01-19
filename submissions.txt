@@ -2,3 +2,5 @@ Data management |Computer Science|Abay Shimelis|APPROVED|good|A
 dggd|General|Abay Shimelis|APPROVED|good|A
 python|General|Abay Shimelis|APPROVED||A
 DataBase|General|Abay Shimelis|APPROVED|keep it up |A+
+Database |Computer Science|Abay Shimelis|APPROVED|Good|A
+Database project |Database|Abay Shimelis|APPROVED|goodd|A

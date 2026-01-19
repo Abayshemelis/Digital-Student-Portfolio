@@ -32,14 +32,19 @@ public class PortfolioController {
     private static final Logger LOGGER = Logger.getLogger(PortfolioController.class.getName());
     private static final String STUDENT_NAME_KEY = "Abay Shimelis";
 
-    // --- FXML UI Components (Resolves "Unresolved fx:id" errors) ---
-    @FXML private ListView<Submission> portfolioListView; // Used in MyPortfolio view
-    @FXML private TextField titleField;                   // Used in CreatePortfolio view
+    // --- FXML UI Components ---
+    @FXML private ListView<Submission> portfolioListView;
+    @FXML private TextField titleField;
     @FXML private TextArea descriptionArea;
     @FXML private ComboBox<String> courseComboBox;
     @FXML private ComboBox<String> assignmentComboBox;
     @FXML private DatePicker submissionDatePicker;
     @FXML private Label fileNameLabel;
+
+    // --- Added for Organization and Email Support ---
+    @FXML private TextField emailField;
+    @FXML private TextField organizationField;
+    @FXML private ComboBox<String> orgTypeComboBox;
 
     @FXML
     public void initialize() {
@@ -50,7 +55,7 @@ public class PortfolioController {
 
         // Initialize Form if present
         if (courseComboBox != null) {
-            courseComboBox.getItems().setAll("Computer Science", "Engineering", "Art", "Business");
+            courseComboBox.getItems().setAll("Software Engineering", "Database", "Java", "C++", "Python", "Assembly Language");
         }
         if (assignmentComboBox != null) {
             assignmentComboBox.getItems().setAll("Project", "Assignment", "Thesis", "Lab Report");
@@ -58,9 +63,13 @@ public class PortfolioController {
         if (submissionDatePicker != null) {
             submissionDatePicker.setValue(LocalDate.now());
         }
-    }
 
-    // --- Event Handlers (Resolves "Cannot resolve symbol" errors) ---
+        // Initialize Organization Types
+        if (orgTypeComboBox != null) {
+            orgTypeComboBox.getItems().setAll("Faculty", "Private Company", "Research Lab", "NGO");
+            orgTypeComboBox.setValue("Faculty");
+        }
+    }
 
     @FXML
     private void handleFileUpload(ActionEvent event) {
@@ -74,16 +83,24 @@ public class PortfolioController {
 
     @FXML
     private void handlePublish(ActionEvent event) {
-        if (titleField == null || titleField.getText().isEmpty()) {
+        // 1. Validation Logic
+        if (titleField == null || titleField.getText().trim().isEmpty()) {
             showSimpleAlert("Validation Error", "Please enter a project title.");
             return;
         }
 
+        String email = (emailField != null) ? emailField.getText().trim() : "";
+        if (!email.contains("@") || email.length() < 5) {
+            showSimpleAlert("Validation Error", "Please enter a valid organization email.");
+            return;
+        }
+
+        // 2. Create the core Submission object
         Submission newSubmission = new Submission(
                 titleField.getText(),
                 courseComboBox.getValue() != null ? courseComboBox.getValue() : "General",
                 assignmentComboBox.getValue() != null ? assignmentComboBox.getValue() : "Project",
-                "Academic",
+                orgTypeComboBox.getValue() != null ? orgTypeComboBox.getValue() : "Academic",
                 submissionDatePicker.getValue() != null ? submissionDatePicker.getValue() : LocalDate.now(),
                 descriptionArea.getText(),
                 fileNameLabel != null ? fileNameLabel.getText() : "No file",
@@ -91,8 +108,13 @@ public class PortfolioController {
                 STUDENT_NAME_KEY
         );
 
+        // 3. Attach the new Organization data (Requires Submission model setters)
+        newSubmission.setEmail(email);
+        newSubmission.setOrganizationName(organizationField != null ? organizationField.getText() : "N/A");
+
+        // 4. Persistence and Navigation
         DataManager.addSubmission(newSubmission);
-        handleBack(event); // Return to dashboard after saving
+        handleBack(event);
     }
 
     @FXML
@@ -104,8 +126,6 @@ public class PortfolioController {
     private void handleBack(ActionEvent event) {
         switchScene("/com/amazi/view/DashBoard.fxml", "Dashboard", event);
     }
-
-    // --- Navigation Logic ---
 
     private void switchScene(String fxmlPath, String windowTitle, ActionEvent event) {
         try {
@@ -119,7 +139,6 @@ public class PortfolioController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             Scene scene = new Scene(root);
 
-            // Apply CSS if exists
             URL css = getClass().getResource("/com/amazi/view/style.css");
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
 

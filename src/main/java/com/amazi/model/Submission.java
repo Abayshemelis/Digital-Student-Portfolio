@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 /**
- * SUBMISSION MODEL - Updated for Controller Compatibility
+ * SUBMISSION MODEL - Updated for Controller, Service, and Organization Compatibility
  */
 @SuppressWarnings("unused")
 public class Submission {
@@ -23,6 +23,10 @@ public class Submission {
     private String feedback;         // This is the faculty comment
     private boolean viewedByStudent;
 
+    // --- NEW FIELDS: Added for Organization and Email Support ---
+    private String email;
+    private String organizationName;
+
     public Submission(String title, String course, String assignment,
                       String category, LocalDate date, String desc,
                       String file, String status, String studentName) {
@@ -40,9 +44,31 @@ public class Submission {
         this.grade = "N/A";
         this.feedback = "";
         this.viewedByStudent = false;
+
+        // Initialize new fields to avoid NullPointerExceptions
+        this.email = "";
+        this.organizationName = "";
     }
 
-    // --- NEW: COMPATIBILITY METHOD (Fixes the Controller Error) ---
+    // --- NEW: ORGANIZATION GETTERS & SETTERS (Fixes Service Errors) ---
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getOrganizationName() {
+        return organizationName;
+    }
+
+    public void setOrganizationName(String organizationName) {
+        this.organizationName = organizationName;
+    }
+
+    // --- COMPATIBILITY METHOD ---
     /**
      * Alias for getFeedback() to match the Dashboard Controller's requirements.
      */
