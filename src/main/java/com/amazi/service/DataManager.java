@@ -41,9 +41,6 @@ public class DataManager {
         saveUsersToFile();
     }
 
-    /**
-     * NEW: Required for Admin Management to remove users permanently.
-     */
     public static void deleteUser(User user) {
         if (user == null) return;
         users.removeIf(u -> u.getUserID() == user.getUserID());
@@ -97,10 +94,6 @@ public class DataManager {
 
     // --- SUBMISSION MANAGEMENT ---
 
-    /**
-     * UPDATED: Forces a reload from file so the Admin/Student
-     * sees live updates when the lecturer grades a project.
-     */
     public static ObservableList<Submission> getAllSubmissions() {
         loadSubmissionsFromFile();
         return allSubmissions;
@@ -112,10 +105,9 @@ public class DataManager {
     }
 
     public static void updateSubmissionInFile(Submission submission) {
-        loadSubmissionsFromFile(); // Sync with file before updating
+        loadSubmissionsFromFile();
         for (int i = 0; i < allSubmissions.size(); i++) {
             Submission current = allSubmissions.get(i);
-            // Use ID or Title+StudentName to match
             if (current.getTitle().equals(submission.getTitle()) &&
                     current.getStudentName().equals(submission.getStudentName())) {
                 allSubmissions.set(i, submission);
@@ -125,6 +117,9 @@ public class DataManager {
         saveSubmissionsToFile();
     }
 
+    /**
+     * FULLY UPDATED: Now loads the Description, Organization Name, and Email from the file.
+     */
     private static void loadSubmissionsFromFile() {
         File file = new File(SUBMISSION_FILE);
         if (!file.exists()) return;
@@ -133,13 +128,27 @@ public class DataManager {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("\\|");
-                if (parts.length >= 6) {
-                    Submission s = new Submission(parts[0], parts[1], "Project", "General",
-                            LocalDate.now(), "No description", "None",
-                            parts[3], parts[2]);
-                    s.setFeedback(parts[4]);
-                    s.setGrade(parts[5]);
+                String[] p = line.split("\\|");
+                // Check for index safety (p.length >= 9 to accommodate email and org)
+                if (p.length >= 6) {
+                    Submission s = new Submission(
+                            p[0], // Title
+                            p[1], // Course
+                            "Project",
+                            "General",
+                            LocalDate.now(),
+                            p.length > 6 ? p[6] : "No description", // Description
+                            "None",
+                            p[3], // Status
+                            p[2]  // StudentName
+                    );
+                    s.setFeedback(p[4]);
+                    s.setGrade(p[5]);
+
+                    // --- Load the NEW Organization Data ---
+                    if (p.length > 7) s.setOrganizationName(p[7]);
+                    if (p.length > 8) s.setEmail(p[8]);
+
                     allSubmissions.add(s);
                 }
             }
@@ -148,12 +157,23 @@ public class DataManager {
         }
     }
 
+    /**
+     * FULLY UPDATED: Now saves Description, Organization Name, and Email.
+     */
     private static void saveSubmissionsToFile() {
         try (PrintWriter writer = new PrintWriter(new FileWriter(SUBMISSION_FILE))) {
             for (Submission s : allSubmissions) {
-                writer.println(s.getTitle() + "|" + s.getCourse() + "|" + s.getStudentName() + "|" +
-                        s.getStatus() + "|" + (s.getFeedback() == null ? "No feedback" : s.getFeedback()) + "|" +
-                        (s.getGrade() == null ? "N/A" : s.getGrade()));
+                writer.println(
+                        s.getTitle() + "|" +
+                                s.getCourse() + "|" +
+                                s.getStudentName() + "|" +
+                                s.getStatus() + "|" +
+                                (s.getFeedback() == null ? "No feedback" : s.getFeedback()) + "|" +
+                                (s.getGrade() == null ? "N/A" : s.getGrade()) + "|" +
+                                s.getDescription() + "|" +         // Column 6
+                                s.getOrganizationName() + "|" +    // Column 7
+                                s.getEmail()                       // Column 8
+                );
             }
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Critical error saving submissions", e);
