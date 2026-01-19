@@ -33,7 +33,11 @@
             </HBox>
         </VBox>
 
-        <Button text="Sign Out" onAction="#handleLogout" maxWidth="Infinity" styleClass="btn-outline-logout-academic"/>
+        <Button fx:id="logoutButton"
+                text="Sign Out"
+                onAction="#handleLogout"
+                maxWidth="Infinity"
+                styleClass="btn-outline-logout-academic, student-logout-btn"/>
     </VBox>
 
     <ScrollPane fitToWidth="true" HBox.hgrow="ALWAYS" styleClass="content-scroll-pane">

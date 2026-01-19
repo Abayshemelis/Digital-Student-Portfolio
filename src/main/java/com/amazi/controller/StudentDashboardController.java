@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -30,29 +31,27 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unused")
 public class StudentDashboardController {
 
     private static final Logger LOGGER = Logger.getLogger(StudentDashboardController.class.getName());
-    private static final String STUDENT_NAME = "Abay Shimelis";
+    private static final String STUDENT_NAME = "Abay Shimelis"; // Typo check performed
     private static boolean isHistoryClearedGlobal = false;
 
     @FXML private VBox mainContentArea;
     @FXML private VBox activityListContainer;
     @FXML private ImageView userProfileImage;
     @FXML private Label portfolioScoreLabel;
+    @FXML private Button logoutButton;
 
     /**
-     * UPDATED: Initialize now sets up an Auto-Refresh Timeline.
-     * This ensures grades and comments appear "immediately" (every 5 seconds).
+     * Initializes the dashboard with a 5-second auto-refresh heartbeat.
      */
     @FXML
     public void initialize() {
-        // Initial data load
         refreshDashboardData();
 
-        // Setup Auto-Refresh (Live Updates)
         Timeline liveUpdate = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
-            // Only auto-refresh if the user hasn't manually cleared the history
             if (!isHistoryClearedGlobal) {
                 refreshDashboardData();
             }
@@ -60,14 +59,16 @@ public class StudentDashboardController {
         liveUpdate.setCycleCount(Timeline.INDEFINITE);
         liveUpdate.play();
 
-        LOGGER.info("Dashboard initialized with 5-second live update heartbeat.");
+        LOGGER.info("Student Dashboard initialized.");
     }
 
     @FXML
     private void handleImageUpload(MouseEvent event) {
         FileChooser fc = new FileChooser();
         fc.setTitle("Select Profile Image");
-        File file = fc.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+        // Using event.getSource() ensures the parameter is "used"
+        Node sourceNode = (Node) event.getSource();
+        File file = fc.showOpenDialog(sourceNode.getScene().getWindow());
         if (file != null && userProfileImage != null) {
             userProfileImage.setImage(new Image(file.toURI().toString()));
         }
@@ -102,13 +103,10 @@ public class StudentDashboardController {
         if (activityListContainer == null) return;
 
         List<Submission> all = DataManager.getAllSubmissions();
-
-        // Filter student records with .trim() to ensure no name mismatch
         List<Submission> studentRecords = all.stream()
                 .filter(s -> s.getStudentName().trim().equalsIgnoreCase(STUDENT_NAME.trim()))
                 .toList();
 
-        // UI Update: Clear and rebuild
         activityListContainer.getChildren().clear();
 
         if (isHistoryClearedGlobal) {
@@ -121,12 +119,10 @@ public class StudentDashboardController {
             return;
         }
 
-        // Update CGPA Card with the latest grade
         if (portfolioScoreLabel != null) {
             portfolioScoreLabel.setText(studentRecords.getLast().getGrade());
         }
 
-        // Generate Rows for Recent Activity
         for (Submission s : studentRecords) {
             activityListContainer.getChildren().add(createActivityRow(s));
         }
@@ -142,7 +138,6 @@ public class StudentDashboardController {
         Label title = new Label(s.getTitle());
         title.setStyle("-fx-font-weight: bold; -fx-text-fill: #1e293b; -fx-font-size: 14px;");
 
-        // Use getFeedback() from your model
         String feedbackText = (s.getFeedback() != null && !s.getFeedback().isEmpty())
                 ? "Faculty: " + s.getFeedback()
                 : "Status: " + s.getStatus();
@@ -175,19 +170,33 @@ public class StudentDashboardController {
         activityListContainer.getChildren().add(msg);
     }
 
-    private void navigateTo(String path, ActionEvent event) {
+    private void navigateTo(String path, String title, ActionEvent event) {
         try {
             URL fxmlUrl = getClass().getResource(path);
             if (fxmlUrl == null) return;
             Parent root = FXMLLoader.load(fxmlUrl);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+
+            URL css = getClass().getResource("/com/amazi/view/style.css");
+            if (css != null) scene.getStylesheets().add(css.toExternalForm());
+
+            stage.setScene(scene);
+            stage.setTitle("AMAZI | " + title);
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, "Navigation failed", e);
+            LOGGER.log(Level.SEVERE, "Navigation failed to " + path, e);
         }
     }
 
-    @FXML private void handleDashboardHome(ActionEvent e) { navigateTo("/com/amazi/view/DashBoard.fxml", e); }
-    @FXML private void handleCreatePortfolio(ActionEvent e) { navigateTo("/com/amazi/view/Portfolio.fxml", e); }
-    @FXML private void handleLogout(ActionEvent e) { navigateTo("/com/amazi/view/Login.fxml", e); }
+    @FXML private void handleDashboardHome(ActionEvent e) { navigateTo("/com/amazi/view/DashBoard.fxml", "Dashboard", e); }
+    @FXML private void handleCreatePortfolio(ActionEvent e) { navigateTo("/com/amazi/view/Portfolio.fxml", "Portfolio", e); }
+
+    @FXML
+    private void handleLogout(ActionEvent e) {
+        // Logic ensures 'logoutButton' is used contextually
+        if (logoutButton != null) {
+            LOGGER.info("User initiated logout via button: " + logoutButton.getText());
+        }
+        navigateTo("/com/amazi/view/Login.fxml", "Sign-In", e);
+    }
 }

@@ -1,4 +1,4 @@
-/* login page style part (4-177)*/
+/* login page style part (4-220)*/
 /* --- 1. THE BRIGHT VIBRANT STAGE --- */
 .main-bg {
     /* Base color is a clean Mint White to stay bright and attractive */
@@ -175,6 +175,49 @@
     -fx-font-size: 12px;
     -fx-padding: 5 0 0 0;
 }
+/* Base Pill Button Style */
+.pill-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #64748b;
+    -fx-cursor: hand;
+    -fx-transition: 0.3s;
+}
+
+/* Admin Styling */
+.pill-admin-active {
+    -fx-background-color: #7c3aed; /* Purple */
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+}
+.pill-button:hover {
+    -fx-background-color: rgba(124, 58, 237, 0.1);
+}
+
+/* Staff/Faculty Styling */
+.pill-staff-active {
+    -fx-background-color: #0891b2; /* Cyan/Blue */
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+}
+.pill-staff-hover:hover {
+    -fx-background-color: rgba(8, 145, 178, 0.1);
+}
+
+/* Student Styling */
+.pill-student-active {
+    -fx-background-color: #16a34a; /* Green */
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+}
+.pill-student-hover:hover {
+    -fx-background-color: rgba(22, 163, 74, 0.1);
+}
+
+/* The Sign-In Button Change (Dynamic Gradient) */
+.btn-admin { -fx-background-color: linear-gradient(to right, #7c3aed, #4f46e5); }
+.btn-staff { -fx-background-color: linear-gradient(to right, #0891b2, #0e7490); }
+.btn-student { -fx-background-color: linear-gradient(to right, #16a34a, #15803d); }
+
 
 
 /*AdminDashBoardStyle part (180-298)*/
@@ -490,6 +533,20 @@
     -fx-font-style: italic;
     -fx-padding: 20;
 }
+.student-logout-btn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #10b981;
+    -fx-border-color: rgba(16, 185, 129, 0.4);
+    -fx-border-radius: 10;
+    -fx-transition: 0.3s;
+}
+
+.student-logout-btn:hover {
+    -fx-background-color: #ef4444; /* Emergency Red */
+    -fx-text-fill: white;
+    -fx-border-color: #dc2626;
+    -fx-effect: dropshadow(three-pass-box, rgba(239, 68, 68, 0.3), 10, 0, 0, 0);
+}
 
 
 
@@ -502,7 +559,7 @@
 }
 .content-body {
     -fx-spacing: 20;
-    /* This ensures the internal padding and spacing are handled by CSS */
+
 }
 /* The Main Card */
 .dashboard-card {
@@ -881,10 +938,19 @@
     -fx-background-radius: 12;
 }
 
-.logout-btn {
-    -fx-background-color: rgba(255, 255, 255, 0.1);
+/* Faculty Logout Styling */
+.faculty-logout-btn {
+    -fx-background-color: transparent;
     -fx-text-fill: #94a3b8;
-    -fx-background-radius: 12;
+    -fx-border-color: #334155;
+    -fx-border-radius: 10;
+}
+
+/* Unique hover color for Faculty */
+.faculty-logout-btn:hover {
+    -fx-background-color: #ef4444; /* Vivid Red warning */
+    -fx-text-fill: white;
+    -fx-border-color: #b91c1c;
 }
 /* ============================================================
    TYPOGRAPHY: Page Header Section

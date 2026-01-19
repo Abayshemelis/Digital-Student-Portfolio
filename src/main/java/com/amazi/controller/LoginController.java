@@ -14,6 +14,7 @@ import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unused") // Suppresses "field never assigned" warnings from IDE
 public class LoginController {
     private static final Logger LOGGER = Logger.getLogger(LoginController.class.getName());
     private static final String ERROR_COLOR = "#fb7185";
@@ -25,6 +26,7 @@ public class LoginController {
     @FXML private Label messageLabel;
 
     @FXML private Button adminTab, staffTab, studentTab;
+    @FXML private Button signInButton;
 
     @FXML
     public void initialize() {
@@ -32,46 +34,50 @@ public class LoginController {
         if (roleSelector != null) {
             roleSelector.setValue("Student");
         }
-        // Initialize the first tab as active visually
+
         if (studentTab != null) {
-            studentTab.getStyleClass().add("tab-button-active");
+            studentTab.getStyleClass().add("pill-student-active");
         }
     }
 
-    /**
-     * Updates the UI tabs and the internal role selection.
-     */
     @FXML
     private void handleTabSwitch(ActionEvent event) {
         Button clicked = (Button) event.getSource();
         messageLabel.setText("");
 
-        // Reset all buttons to standard tab-button style
-        adminTab.getStyleClass().removeAll("tab-button-active");
-        staffTab.getStyleClass().removeAll("tab-button-active");
-        studentTab.getStyleClass().removeAll("tab-button-active");
+        adminTab.getStyleClass().removeAll("pill-admin-active", "pill-button-active");
+        staffTab.getStyleClass().removeAll("pill-staff-active", "pill-button-active");
+        studentTab.getStyleClass().removeAll("pill-student-active", "pill-button-active");
 
-        adminTab.getStyleClass().add("tab-button");
-        staffTab.getStyleClass().add("tab-button");
-        studentTab.getStyleClass().add("tab-button");
+        adminTab.getStyleClass().add("pill-button");
+        staffTab.getStyleClass().add("pill-button");
+        studentTab.getStyleClass().add("pill-button");
 
-        // Apply active style to the selected tab
-        clicked.getStyleClass().remove("tab-button");
-        clicked.getStyleClass().add("tab-button-active");
-
-        // Update the hidden or visible role selector
         if (clicked == adminTab) {
+            clicked.getStyleClass().add("pill-admin-active");
             roleSelector.setValue("Admin");
+            updateSignInTheme("btn-admin");
         } else if (clicked == staffTab) {
+            clicked.getStyleClass().add("pill-staff-active");
             roleSelector.setValue("Faculty");
+            updateSignInTheme("btn-staff");
         } else {
+            clicked.getStyleClass().add("pill-student-active");
             roleSelector.setValue("Student");
+            updateSignInTheme("btn-student");
+        }
+    }
+
+    private void updateSignInTheme(String themeClass) {
+        if (signInButton != null) {
+            signInButton.getStyleClass().removeAll("btn-admin", "btn-staff", "btn-student");
+            signInButton.getStyleClass().add(themeClass);
         }
     }
 
     @FXML
     private void handleLogin(ActionEvent event) {
-        String identifier = emailField.getText().trim(); // Can be username or email
+        String identifier = emailField.getText().trim();
         String password = passwordField.getText();
         String selectedRole = roleSelector.getValue();
 
@@ -80,7 +86,6 @@ public class LoginController {
             return;
         }
 
-        // Logic check against DataManager
         User user = DataManager.validateUser(identifier, password);
 
         if (user != null) {
@@ -90,13 +95,9 @@ public class LoginController {
         }
     }
 
-    /**
-     * Ensures the user's account role matches the tab they are trying to log in from.
-     */
     private void validateRoleAndNavigate(User user, String selectedRole, ActionEvent event) {
         String actualRole = user.getRole();
 
-        // Security check: Match database role with UI selection
         if (actualRole != null && actualRole.equalsIgnoreCase(selectedRole)) {
             String fxmlPath = switch (selectedRole.toLowerCase()) {
                 case "admin" -> "/com/amazi/view/AdminDashboard.fxml";
@@ -120,7 +121,13 @@ public class LoginController {
 
     @FXML
     private void handleForgotPassword(ActionEvent event) {
-        showStatus("Reset link sent to: " + emailField.getText(), SUCCESS_COLOR);
+        // Use event to find the stage for potential dialogs
+        String userEmail = emailField.getText();
+        if (userEmail.isEmpty()) {
+            showStatus("Please enter your email first.", ERROR_COLOR);
+        } else {
+            showStatus("Reset link sent to: " + userEmail, SUCCESS_COLOR);
+        }
     }
 
     private void showStatus(String message, String color) {
@@ -128,25 +135,22 @@ public class LoginController {
         messageLabel.setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
     }
 
-    /**
-     * Standardized scene switcher with CSS injection.
-     */
     private void changeScene(String fxml, String title, ActionEvent event) {
         try {
             URL loc = getClass().getResource(fxml);
             if (loc == null) {
-                LOGGER.log(Level.SEVERE, "FXML Path not found: " + fxml);
+                LOGGER.log(Level.SEVERE, "FXML Path not found: {0}", fxml);
                 showStatus("UI Error: Missing view file.", ERROR_COLOR);
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(loc);
             Parent root = loader.load();
+
+
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
             Scene scene = new Scene(root);
-
-            // Re-apply global CSS
             URL css = getClass().getResource("/com/amazi/view/style.css");
             if (css != null) {
                 scene.getStylesheets().add(css.toExternalForm());
