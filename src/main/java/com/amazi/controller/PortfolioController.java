@@ -108,7 +108,7 @@ public class PortfolioController {
                 STUDENT_NAME_KEY
         );
 
-        // 3. Attach the new Organization data (Requires Submission model setters)
+
         newSubmission.setEmail(email);
         newSubmission.setOrganizationName(organizationField != null ? organizationField.getText() : "N/A");
 
@@ -143,7 +143,7 @@ public class PortfolioController {
             if (css != null) scene.getStylesheets().add(css.toExternalForm());
 
             stage.setScene(scene);
-            stage.setTitle("AMAZI | " + windowTitle);
+            stage.setTitle("Student | " + windowTitle);
             stage.show();
         } catch (IOException e) {
             LOGGER.log(Level.SEVERE, "Navigation Error", e);

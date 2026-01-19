@@ -3,9 +3,7 @@ package com.amazi.model;
 import java.time.LocalDate;
 import java.util.UUID;
 
-/**
- * SUBMISSION MODEL - Updated for Controller, Service, and Organization Compatibility
- */
+
 @SuppressWarnings("unused")
 public class Submission {
 
@@ -20,7 +18,7 @@ public class Submission {
     private LocalDate completionDate;
     private String status;
     private String grade;
-    private String feedback;         // This is the faculty comment
+    private String feedback;
     private boolean viewedByStudent;
 
     // --- NEW FIELDS: Added for Organization and Email Support ---
@@ -50,7 +48,6 @@ public class Submission {
         this.organizationName = "";
     }
 
-    // --- NEW: ORGANIZATION GETTERS & SETTERS (Fixes Service Errors) ---
 
     public String getEmail() {
         return email;
@@ -69,9 +66,7 @@ public class Submission {
     }
 
     // --- COMPATIBILITY METHOD ---
-    /**
-     * Alias for getFeedback() to match the Dashboard Controller's requirements.
-     */
+
     public String getFacultyComment() {
         return this.feedback;
     }

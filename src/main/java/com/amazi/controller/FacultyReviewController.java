@@ -2,6 +2,7 @@ package com.amazi.controller;
 
 import com.amazi.model.Submission;
 import com.amazi.service.DataManager;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,17 +29,23 @@ public class FacultyReviewController {
     @FXML private VBox detailsPane;
     @FXML private Circle statusCircle;
 
+    @FXML private Label orgLabel;
+    @FXML private Label emailLabel;
+
     private Submission selectedSubmission;
 
     @FXML
     public void initialize() {
-        // 1. Column Mapping
+        // 1. Column Mapping - These MUST match the variable names in Submission.java exactly
         colStudent.setCellValueFactory(new PropertyValueFactory<>("studentName"));
         colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
         colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        // 2. Search Logic (Filtering based on DataManager list)
-        FilteredList<Submission> filteredData = new FilteredList<>(DataManager.getAllSubmissions(), p -> true);
+        // 2. Data Sync: Force a fresh load from DataManager to ensure we see student submissions
+        ObservableList<Submission> masterData = DataManager.getAllSubmissions();
+
+        // 3. Search Logic
+        FilteredList<Submission> filteredData = new FilteredList<>(masterData, p -> true);
 
         searchField.textProperty().addListener((obs, old, newVal) -> {
             filteredData.setPredicate(s -> {
@@ -49,9 +56,10 @@ public class FacultyReviewController {
             });
         });
 
+        // Bind the filtered list to the table
         submissionTable.setItems(filteredData);
 
-        // 3. Selection Logic: Populate the Evaluation Toolkit
+        // 4. Selection Logic: Populate the Evaluation Toolkit
         submissionTable.getSelectionModel().selectedItemProperty().addListener((obs, old, newVal) -> {
             if (newVal != null) {
                 showDetails(newVal);
@@ -64,6 +72,9 @@ public class FacultyReviewController {
         if (statusCircle != null) {
             statusCircle.setFill(javafx.scene.paint.Color.web("#10b981")); // Success Green
         }
+
+        // DEBUG: Uncomment the line below to check if data is actually arriving in the console
+        // System.out.println("Total Submissions loaded for Faculty: " + masterData.size());
     }
 
     private void showDetails(Submission s) {
@@ -75,6 +86,15 @@ public class FacultyReviewController {
 
         studentLabel.setText(s.getStudentName());
         titleLabel.setText(s.getTitle());
+
+        if (orgLabel != null) {
+            orgLabel.setText(s.getOrganizationName() != null && !s.getOrganizationName().isEmpty()
+                    ? s.getOrganizationName() : "N/A");
+        }
+        if (emailLabel != null) {
+            emailLabel.setText(s.getEmail() != null && !s.getEmail().isEmpty()
+                    ? s.getEmail() : "N/A");
+        }
 
         feedbackArea.setText(s.getFeedback() != null ? s.getFeedback() : "");
         gradeField.setText(s.getGrade() != null ? s.getGrade() : "");
@@ -129,6 +149,10 @@ public class FacultyReviewController {
     private void navigateTo(String fxml, String title, ActionEvent event) {
         try {
             URL loc = getClass().getResource(fxml);
+            if (loc == null) {
+                System.err.println("FXML file not found: " + fxml);
+                return;
+            }
             Parent root = FXMLLoader.load(loc);
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));

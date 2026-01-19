@@ -1,6 +1,7 @@
-Data management |Computer Science|Abay Shimelis|APPROVED|good|A
-dggd|General|Abay Shimelis|APPROVED|good|A
-python|General|Abay Shimelis|APPROVED||A
-DataBase|General|Abay Shimelis|APPROVED|keep it up |A+
-Database |Computer Science|Abay Shimelis|APPROVED|Good|A
-Database project |Database|Abay Shimelis|APPROVED|goodd|A
+Data management |Computer Science|Abay Shimelis|APPROVED|good|A|No description||
+dggd|General|Abay Shimelis|APPROVED|good|A|No description||
+python|General|Abay Shimelis|APPROVED||A|No description||
+DataBase|General|Abay Shimelis|APPROVED|keep it up |A+|No description||
+Database |Computer Science|Abay Shimelis|APPROVED|Good|A|No description||
+Database project |Database|Abay Shimelis|APPROVED|goodd|A|No description||
+cs|Java|Abay Shimelis|APPROVED|It is good |A|presenting computer science |hawassa universtiy|hu@gmail.com
